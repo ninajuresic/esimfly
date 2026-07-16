@@ -13,51 +13,81 @@
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', sans-serif;
-      color: #111827;
-      background: #fff;
+      color: #F5F5F7;
+      background:
+        radial-gradient(ellipse 90% 60% at 50% 0%, rgba(91,141,255,.10), transparent 65% 65%),
+        linear-gradient(19deg, #00000E 0%, #040416 55%, #0E0424 100%);
       line-height: 1.6;
       overflow-x: hidden;
+    }
+    .noise-overlay {
+      position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+      opacity: .16; mix-blend-mode: overlay;
+      background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.75%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');
+    }
+
+    /* ─── Drifting dust particles ─────────────────────── */
+    .particles { position: fixed; inset: 0; z-index: 2; pointer-events: none; overflow: hidden; }
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: rgba(255,120,40,.9);
+      border-radius: 50%;
+      filter: blur(.3px);
+      box-shadow: 0 0 4px 1px rgba(255,106,26,.6);
+      opacity: 0;
+      animation: particle-float linear infinite;
+    }
+    @keyframes particle-float {
+      0%   { transform: translate(0, 0); opacity: 0; }
+      12%  { opacity: .85; }
+      50%  { opacity: .45; }
+      88%  { opacity: .85; }
+      100% { transform: translate(var(--drift-x, 20px), var(--drift-y, -140px)); opacity: 0; }
     }
     a { text-decoration: none; color: inherit; }
     img { display: block; max-width: 100%; }
 
     /* ─── Tokens ─────────────────────────────────────── */
     :root {
-      --blue:    #2563EB;
-      --blue-lt: #EEF4FF;
-      --orange:  #FF6600;
-      --orange-h:#E05500;
+      --blue:    #5B8DFF;
+      --blue-lt: rgba(91,141,255,.14);
+      --orange:  #FF6A1A;
+      --orange-h:#FF832E;
       --green:   #22C55E;
-      --dark:    #0A0D1A;
-      --head:    #111827;
-      --body:    #6B7280;
-      --light:   #F5F7FA;
-      --white:   #fff;
-      --border:  #E5E7EB;
-      --r:       12px;
-      --sh:      0 4px 24px rgba(0,0,0,0.07);
+      --dark:    #040318;
+      --head:    #F5F5F7;
+      --body:    rgba(245,245,247,.62);
+      --light:   #0A0924;
+      --white:   #040318;
+      --border:  rgba(255,255,255,.1);
+      --panel:   rgba(255,255,255,.04);
+      --r:       14px;
+      --sh:      0 16px 40px rgba(0,0,0,.55);
     }
 
     /* ─── Utilities ──────────────────────────────────── */
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
     .sec       { padding: 48px 0; }
     .between   { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-    .see-all   { font-size: .82rem; font-weight: 600; color: var(--blue); white-space: nowrap; transition: opacity .2s; }
+    .see-all   { font-size: .82rem; font-weight: 600; color: #fff; white-space: nowrap; transition: opacity .2s; }
     .see-all:hover { opacity: .75; }
 
     /* ─── Buttons ────────────────────────────────────── */
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
       background: var(--orange); color: #fff;
-      padding: 13px 24px; border-radius: 10px; border: none;
+      padding: 13px 24px; border-radius: 100px; border: none;
       font: 700 .9rem/1 'Inter', sans-serif; cursor: pointer;
-      transition: background .2s, transform .15s;
+      box-shadow: 0 0 0 rgba(255,106,26,0);
+      transition: background .2s, transform .15s, box-shadow .3s;
     }
-    .btn:hover { background: var(--orange-h); transform: translateY(-1px); }
+    .btn:hover { background: var(--orange-h); transform: translateY(-1px); box-shadow: 0 0 28px rgba(255,106,26,.45); }
     .btn-ghost {
-      background: transparent; border: 2px solid var(--orange); color: var(--orange);
+      background: rgba(255,255,255,.06); border: 1.5px solid rgba(255,255,255,.22); color: #fff;
+      backdrop-filter: blur(8px);
     }
-    .btn-ghost:hover { background: var(--orange); color: #fff; }
+    .btn-ghost:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.4); }
 
     /* ─── Reveal animation ───────────────────────────── */
     [data-r] { opacity: 0; transform: translateY(18px); transition: opacity .55s ease, transform .55s ease; }
@@ -68,12 +98,12 @@
     [data-r][data-d="4"] { transition-delay: .28s; }
 
     /* ─── Line icon sizes ────────────────────────────── */
-    .trust-pill-icon svg { width: 15px; height: 15px; color: var(--blue); flex-shrink: 0; }
-    .why-icon svg        { width: 22px; height: 22px; color: var(--blue); }
-    .prod-icon svg       { width: 20px; height: 20px; color: var(--blue); }
+    .trust-pill-icon svg { width: 15px; height: 15px; color: rgba(255,255,255,.55); flex-shrink: 0; }
+    .why-icon svg        { width: 22px; height: 22px; color: rgba(255,255,255,.55); }
+    .prod-icon svg       { width: 20px; height: 20px; color: rgba(255,255,255,.55); }
     .notif-dot svg       { width: 13px; height: 13px; color: #fff; }
-    .blog-read svg       { width: 12px; height: 12px; flex-shrink: 0; color: var(--blue); }
-    .filter-ico svg      { width: 16px; height: 16px; color: var(--blue); }
+    .blog-read svg       { width: 12px; height: 12px; flex-shrink: 0; color: rgba(255,255,255,.55); }
+    .filter-ico svg      { width: 16px; height: 16px; color: rgba(255,255,255,.55); }
     .wa-btn svg          { width: 22px; height: 22px; }
 
     /* ════════════════════════════════════════════════════
@@ -81,11 +111,15 @@
     ════════════════════════════════════════════════════ */
     .navbar {
       position: fixed; top: 0; left: 0; right: 0; z-index: 400;
-      background: var(--dark); border-bottom: 1px solid rgba(255,255,255,.07);
+      background: transparent; border-bottom: 1px solid transparent;
       padding: 13px 0;
-      transition: box-shadow .3s, padding .3s;
+      transition: box-shadow .3s, padding .3s, background .3s, border-color .3s;
     }
-    .navbar.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,.25); padding: 10px 0; }
+    .navbar.scrolled {
+      background: rgba(4,3,24,.7); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      box-shadow: 0 2px 20px rgba(0,0,0,.25); padding: 10px 0;
+    }
     .navbar .container { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 
     /* Logo */
@@ -97,16 +131,36 @@
     .nav-links a { font-size: .87rem; font-weight: 500; color: rgba(255,255,255,.7); transition: color .2s; }
     .nav-links a:hover { color: #fff; }
 
-    /* BHS selector */
-    .lang-sel {
+    /* Language selector */
+    .lang-sel { position: relative; }
+    .lang-sel-btn {
       display: flex; align-items: center; gap: 6px;
-      font-size: .83rem; font-weight: 600; color: #fff;
+      font: inherit; font-size: .83rem; font-weight: 600; color: #fff;
       background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12);
       padding: 6px 12px; border-radius: 8px; cursor: pointer;
       transition: background .2s;
     }
-    .lang-sel:hover { background: rgba(255,255,255,.16); }
-    .lang-sel .chevron { font-size: .65rem; opacity: .6; }
+    .lang-sel-btn:hover { background: rgba(255,255,255,.16); }
+    .lang-sel .chevron { font-size: .65rem; opacity: .6; transition: transform .2s; }
+    .lang-sel.open .chevron { transform: rotate(180deg); }
+    .lang-dropdown {
+      position: absolute; top: calc(100% + 8px); right: 0; z-index: 50;
+      min-width: 140px;
+      background: rgba(10,9,30,.95); backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.12); border-radius: 10px;
+      padding: 6px; box-shadow: 0 12px 30px rgba(0,0,0,.5);
+      opacity: 0; pointer-events: none; transform: translateY(-6px);
+      transition: opacity .2s, transform .2s;
+    }
+    .lang-sel.open .lang-dropdown { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .lang-option {
+      display: flex; align-items: center; gap: 8px; width: 100%;
+      font: inherit; font-size: .83rem; font-weight: 500; color: rgba(255,255,255,.75);
+      background: none; border: none; border-radius: 7px; cursor: pointer;
+      padding: 8px 10px; text-align: left; transition: background .15s, color .15s;
+    }
+    .lang-option:hover { background: rgba(255,255,255,.08); color: #fff; }
+    .lang-option.active { color: var(--orange); }
 
     /* Nav right group */
     .nav-right { display: flex; align-items: center; gap: 10px; }
@@ -128,9 +182,9 @@
     /* Mobile nav drawer */
     .nav-drawer {
       position: fixed; top: 0; left: 0; right: 0;
-      background: #fff; padding: 68px 24px 28px; z-index: 350;
+      background: var(--dark); padding: 68px 24px 28px; z-index: 350;
       border-bottom: 1px solid var(--border);
-      box-shadow: 0 8px 32px rgba(0,0,0,.1);
+      box-shadow: 0 8px 32px rgba(0,0,0,.4);
       transform: translateY(-110%);
       transition: transform .35s cubic-bezier(.4,0,.2,1);
     }
@@ -141,261 +195,249 @@
       color: var(--head); border-bottom: 1px solid var(--border);
       transition: color .2s;
     }
-    .nav-drawer ul a:hover { color: var(--blue); }
+    .nav-drawer ul a:hover { color: #fff; }
     .nav-drawer .btn { margin-top: 18px; width: 100%; }
 
     /* ════════════════════════════════════════════════════
        HERO
     ════════════════════════════════════════════════════ */
     .hero {
-      background: linear-gradient(140deg, #fff 0%, #EDF2FF 55%, #F5F0FF 100%);
-      padding: 90px 0 48px;
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: stretch;
+      background: transparent;
+      padding: 96px 0 32px;
       overflow: hidden;
     }
+    .hero .container { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; }
 
     .hero-inner {
       display: flex; flex-direction: column;
-      gap: 36px; align-items: flex-start;
-      margin-bottom: 32px;
+      align-items: center; text-align: center;
+      gap: 28px;
+      margin: auto 0;
     }
-    .hero-left { flex: 1; }
+    .hero-left { max-width: 460px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
 
     /* Badge */
     .hero-badge {
       display: inline-flex; align-items: center; gap: 7px;
-      background: var(--blue-lt); border: 1px solid rgba(37,99,235,.2);
-      color: var(--blue); padding: 6px 14px; border-radius: 100px;
-      font-size: .78rem; font-weight: 600; margin-bottom: 20px;
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18);
+      color: #fff; padding: 6px 14px; border-radius: 100px;
+      backdrop-filter: blur(10px);
+      font-size: .76rem; font-weight: 600; margin-bottom: 14px;
     }
 
     /* Heading */
     .hero h1 {
-      font-size: 2.5rem; font-weight: 900; line-height: 1.1;
-      color: var(--head); margin-bottom: 16px;
+      font-size: 2.3rem; font-weight: 900; line-height: 1.15;
+      color: var(--head); margin-bottom: 12px;
     }
-    .hero h1 .accent { color: var(--blue); }
+    .hero h1 .accent {
+      color: #fff;
+    }
 
     /* Sub */
     .hero-sub {
-      font-size: .95rem; color: var(--body); margin-bottom: 28px;
-      max-width: 420px; line-height: 1.65;
+      font-size: .88rem; color: var(--body); margin: 0 auto 16px;
+      max-width: 400px; line-height: 1.6;
     }
 
     /* Trust pills */
-    .hero-trust { display: flex; flex-direction: column; gap: 10px; }
+    .hero-trust { display: flex; flex-direction: column; align-items: center; gap: 8px; }
     .trust-pill {
       display: inline-flex; align-items: center; gap: 7px;
-      font-size: .82rem; font-weight: 500; color: var(--head);
+      font-size: .78rem; font-weight: 500; color: var(--head);
     }
     .trust-pill-icon {
       display: flex; align-items: center; justify-content: center;
-      width: 26px; height: 26px; flex-shrink: 0;
+      width: 22px; height: 22px; flex-shrink: 0;
     }
 
-    /* ── Hero illustration (right) ── */
-    .hero-right {
+    /* ── Hero visual: glowing SIM card (Vercel-style) ── */
+    @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    .hero-visual {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
-      width: 100%;
-      position: relative;
+      --sim-w: 118px; --sim-h: 148px; --beam: 72px;
     }
-
-    /* Illustration container — user drops animation here */
-    .hero-illus {
-      position: relative;
-      min-height: 340px;
-      background: linear-gradient(135deg, #DCE9FF 0%, #E8E0FF 100%);
-      border-radius: 20px;
-      overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    /* Floating deco elements */
-    @keyframes floatY { 0%,100%{transform:translateY(0) rotate(0)} 50%{transform:translateY(-12px) rotate(4deg)} }
-    @keyframes floatS { 0%,100%{transform:translateY(0)} 50%{transform:translateY(9px)} }
-    @keyframes pulse  { 0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.45)} 50%{box-shadow:0 0 0 8px rgba(34,197,94,0)} }
-
-    .illus-plane {
-      position: absolute; top: 12px; right: 28px;
-      font-size: 2.2rem; z-index: 4;
-      animation: floatY 3.8s ease-in-out infinite;
-      filter: drop-shadow(0 3px 10px rgba(100,140,255,.35));
-    }
-
-    /* Phone frame */
-    .illus-phone {
-      position: relative; z-index: 3;
-      width: 160px; height: 310px;
-      background: #1A1A2E;
-      border-radius: 26px;
-      border: 5px solid rgba(255,255,255,.25);
-      box-shadow: 0 24px 60px rgba(0,0,0,.3), 0 0 0 1px rgba(255,255,255,.08), inset 0 1px 0 rgba(255,255,255,.15);
-      overflow: hidden;
-      margin-left: 30px;
-    }
-    .illus-phone::before {
-      content: '';
-      position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
-      width: 60px; height: 16px; background: #1A1A2E;
-      border-radius: 12px; z-index: 10;
-    }
-
-    /* Phone screen */
-    .phone-screen {
-      position: absolute; inset: 0;
-      background: linear-gradient(160deg, #1565C0 0%, #1E88E5 45%, #0D47A1 100%);
-      display: flex; flex-direction: column;
-      justify-content: space-between;
-      padding: 34px 12px 12px;
-    }
-
-    /* eSIM chip in center */
-    .esim-chip-wrap {
+    .hero-glow {
       position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -58%);
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      transform: translate(-50%, -50%);
+      width: 340px; height: 300px;
+      filter: blur(28px);
+      z-index: 0;
+      pointer-events: none;
+      transition: opacity .7s ease;
     }
-    .esim-chip {
-      width: 68px; height: 52px;
-      background: rgba(255,255,255,.15); backdrop-filter: blur(6px);
-      border: 1.5px solid rgba(255,255,255,.4);
-      border-radius: 10px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 4px;
-      position: relative;
+    .sim-hover-glow {
+      position: absolute; z-index: 1; top: 50%; left: 50%;
+      opacity: 0; pointer-events: none;
+      filter: blur(30px);
+      transition: opacity .7s ease, transform .7s ease;
     }
-    .chip-dots {
-      display: grid; grid-template-columns: repeat(5,1fr); gap: 2px;
+    .sim-glow-top {
+      width: var(--sim-w); height: var(--beam);
+      transform: translate(-50%, -50%) scale(1, .1);
+      background: linear-gradient(to bottom, transparent 0%, rgba(255,106,26,1) 35%, rgba(255,106,26,1) 65%, transparent 100%);
     }
-    .chip-dots span {
-      width: 4px; height: 4px;
-      background: rgba(255,255,255,.7); border-radius: 1px;
+    .hero-visual.hover-top .sim-glow-top {
+      transform: translate(-50%, calc(-1 * var(--sim-h) / 2 - var(--beam) / 2 + 8px)) scale(1, 1);
     }
-    .chip-label {
-      font-size: .52rem; font-weight: 800; color: #fff; letter-spacing: 1.5px;
+    .sim-glow-right {
+      width: var(--beam); height: var(--sim-h);
+      transform: translate(-50%, -50%) scale(.1, 1);
+      background: linear-gradient(to left, transparent 0%, rgba(255,106,26,1) 35%, rgba(255,106,26,1) 65%, transparent 100%);
     }
-    .chip-badge {
-      position: absolute; top: -8px; right: -8px;
-      width: 20px; height: 20px; border-radius: 50%;
-      background: var(--green); border: 2px solid #fff;
+    .hero-visual.hover-right .sim-glow-right {
+      transform: translate(calc(var(--sim-w) / 2 - var(--beam) / 2 - 8px), -50%) scale(1, 1);
+    }
+    .sim-glow-bottom {
+      width: var(--sim-w); height: var(--beam);
+      transform: translate(-50%, -50%) scale(1, .1);
+      background: linear-gradient(to top, transparent 0%, rgba(255,106,26,1) 35%, rgba(255,106,26,1) 65%, transparent 100%);
+    }
+    .hero-visual.hover-bottom .sim-glow-bottom {
+      transform: translate(-50%, calc(var(--sim-h) / 2 - var(--beam) / 2 - 8px)) scale(1, 1);
+    }
+    .sim-glow-left {
+      width: var(--beam); height: var(--sim-h);
+      transform: translate(-50%, -50%) scale(.1, 1);
+      background: linear-gradient(to right, transparent 0%, rgba(255,106,26,1) 35%, rgba(255,106,26,1) 65%, transparent 100%);
+    }
+    .hero-visual.hover-left .sim-glow-left {
+      transform: translate(calc(-1 * var(--sim-w) / 2 - var(--beam) / 2 + 8px), -50%) scale(1, 1);
+    }
+    .hero-visual.hover-top    .sim-glow-top,
+    .hero-visual.hover-right  .sim-glow-right,
+    .hero-visual.hover-bottom .sim-glow-bottom,
+    .hero-visual.hover-left   .sim-glow-left { opacity: 1; }
+    .hero-visual.hover-top    .hero-glow,
+    .hero-visual.hover-right  .hero-glow,
+    .hero-visual.hover-bottom .hero-glow,
+    .hero-visual.hover-left   .hero-glow { opacity: .3; }
+    .sim-card-shadow {
+      position: absolute; inset: 0; margin: auto;
+      width: var(--sim-w); height: var(--sim-h);
+      border-radius: 18px;
+      box-shadow: 0 20px 45px rgba(0,0,0,.6);
+      z-index: 1;
+      pointer-events: none;
+      animation: floatY 5s ease-in-out infinite;
+    }
+    .sim-card-hero {
+      position: relative; z-index: 2;
+      width: var(--sim-w); height: var(--sim-h);
+      background: linear-gradient(160deg, #0B0A26 0%, #14112E 60%, #1C1440 100%);
+      border: 1px solid rgba(255,255,255,.14);
+      clip-path: polygon(0 0, 68% 0, 100% 28%, 100% 100%, 0 100%);
+      border-radius: 18px;
       display: flex; align-items: center; justify-content: center;
-      font-size: .55rem; color: #fff; font-weight: 800;
+      animation: floatY 5s ease-in-out infinite;
+      transition: border-color .7s ease;
+      cursor: pointer;
     }
-    .esim-sim-text {
-      font-size: .52rem; font-weight: 700; color: rgba(255,255,255,.7);
-      letter-spacing: 2px;
+    .hero-visual.hover-top    .sim-card-hero,
+    .hero-visual.hover-right  .sim-card-hero,
+    .hero-visual.hover-bottom .sim-card-hero,
+    .hero-visual.hover-left   .sim-card-hero { border-color: rgba(255,106,26,.55); }
+    .sim-card-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      clip-path: polygon(0 0, 68% 0, 100% 28%, 100% 100%, 0 100%);
+      border-radius: 18px;
+      background: linear-gradient(160deg, rgba(255,255,255,.14), transparent 45%);
+      mix-blend-mode: overlay;
     }
-
-    /* Phone status */
-    .phone-status {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: .52rem; font-weight: 700; color: rgba(255,255,255,.9);
-    }
-    .phone-status-right { display: flex; gap: 3px; }
-
-    /* Phone notification card */
-    .phone-notif {
-      background: rgba(255,255,255,.95);
-      border-radius: 8px; padding: 8px 10px;
-      display: flex; align-items: center; gap: 7px;
-    }
-    .notif-dot {
-      width: 22px; height: 22px; border-radius: 50%;
-      background: var(--blue); flex-shrink: 0;
+    .sim-chip-hero {
+      position: relative; z-index: 3;
+      width: 56px; height: 42px;
+      background: rgba(255,255,255,.1);
+      backdrop-filter: blur(6px);
+      border: 1.5px solid rgba(255,255,255,.3);
+      border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: .6rem; color: #fff; font-weight: 700;
+      transition: background .7s ease, border-color .7s ease;
     }
-    .notif-title { font-size: .58rem; font-weight: 800; color: var(--head); }
-    .notif-sub   { font-size: .5rem;  color: var(--body); margin-top: 1px; }
-
-    /* Physical SIM overlay */
-    .illus-sim {
-      position: absolute; bottom: 40px; left: 10px; z-index: 5;
-      width: 72px; height: 90px;
-      background: linear-gradient(160deg, #4A1D96, #7C3AED);
-      border-radius: 8px 8px 8px 20px;
-      box-shadow: 0 8px 24px rgba(0,0,0,.25);
-      display: flex; flex-direction: column;
-      align-items: flex-start; justify-content: flex-end;
-      padding: 8px;
+    .hero-visual.hover-top    .sim-chip-hero,
+    .hero-visual.hover-right  .sim-chip-hero,
+    .hero-visual.hover-bottom .sim-chip-hero,
+    .hero-visual.hover-left   .sim-chip-hero {
+      background: rgba(255,106,26,.18);
+      border-color: rgba(255,106,26,.6);
     }
-    .sim-chip-gold {
-      width: 32px; height: 24px;
-      background: linear-gradient(135deg, #F6D860, #C8A400);
-      border-radius: 5px; margin-bottom: 4px;
+    .sim-chip-hero-icon {
+      width: 22px; height: 22px;
+      color: rgba(255,255,255,.6);
+      transition: color .7s ease;
     }
-    .sim-text-white {
-      font-size: .48rem; font-weight: 700; color: rgba(255,255,255,.7);
-      letter-spacing: 1px;
+    .hero-visual.hover-top    .sim-chip-hero-icon,
+    .hero-visual.hover-right  .sim-chip-hero-icon,
+    .hero-visual.hover-bottom .sim-chip-hero-icon,
+    .hero-visual.hover-left   .sim-chip-hero-icon {
+      color: rgba(255,150,80,.9);
     }
 
-    /* Connected badge (bottom right) */
-    .illus-badge {
-      position: absolute; bottom: 20px; right: 12px; z-index: 6;
-      background: #fff; border-radius: 10px;
-      padding: 8px 12px 8px 8px;
-      display: flex; align-items: center; gap: 7px;
-      box-shadow: 0 6px 20px rgba(0,0,0,.18);
+    /* ── Hero right column: search + product cards ── */
+    .hero-right-col {
+      width: 100%; max-width: 360px;
+      display: flex; flex-direction: column; gap: 12px;
     }
-    .badge-check {
-      width: 26px; height: 26px; border-radius: 50%; background: var(--green);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; font-size: .7rem; color: #fff; font-weight: 800;
-      animation: pulse 2.2s ease-in-out infinite;
-    }
-    .badge-text-main { font-size: .62rem; font-weight: 800; color: var(--head); line-height: 1.2; }
-    .badge-text-sub  { font-size: .55rem; color: var(--body); }
 
     /* ── Search bar ── */
     .hero-search-box {
       display: flex; align-items: center;
-      background: #fff; border: 1.5px solid var(--border);
-      border-radius: var(--r); padding: 0 16px;
-      max-width: 700px; margin: 0 auto 16px;
-      box-shadow: 0 2px 10px rgba(0,0,0,.05);
+      background: rgba(255,255,255,.05); border: 1.5px solid var(--border);
+      backdrop-filter: blur(12px);
+      border-radius: var(--r); padding: 0 14px;
       transition: border-color .2s, box-shadow .2s;
     }
     .hero-search-box:focus-within {
-      border-color: rgba(37,99,235,.35);
-      box-shadow: 0 2px 12px rgba(37,99,235,.1);
+      border-color: rgba(255,106,26,.5);
+      box-shadow: 0 0 0 3px rgba(255,106,26,.15);
     }
-    .search-ico    { font-size: .95rem; color: var(--body); flex-shrink: 0; }
+    .search-ico    { display: flex; align-items: center; color: var(--body); flex-shrink: 0; }
+    .search-ico svg { width: 16px; height: 16px; }
     .hero-search-box input {
-      flex: 1; padding: 15px 10px; border: none; outline: none;
-      font: 500 .93rem 'Inter', sans-serif; color: var(--head); background: transparent;
+      flex: 1; padding: 13px 10px; border: none; outline: none;
+      font: 500 .87rem 'Inter', sans-serif; color: var(--head); background: transparent;
     }
-    .hero-search-box input::placeholder { color: #9CA3AF; }
-    .filter-ico { font-size: 1rem; color: var(--body); flex-shrink: 0; cursor: pointer; opacity: .65; transition: opacity .2s; }
+    .hero-search-box input::placeholder { color: rgba(245,245,247,.35); }
+    .filter-ico { font-size: .95rem; color: var(--body); flex-shrink: 0; cursor: pointer; opacity: .65; transition: opacity .2s; }
     .filter-ico:hover { opacity: 1; }
 
     /* ── Product cards ── */
     .hero-products {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 12px; max-width: 700px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr;
+      gap: 10px;
     }
     .prod-card {
-      display: flex; align-items: center; gap: 12px;
-      background: #fff; border: 1.5px solid var(--border);
-      border-radius: var(--r); padding: 13px 14px;
+      display: flex; align-items: center; gap: 11px;
+      background: rgba(255,255,255,.04); border: 1.5px solid var(--border);
+      backdrop-filter: blur(10px);
+      border-radius: var(--r); padding: 11px 13px;
       transition: border-color .2s, box-shadow .2s, transform .2s;
-      box-shadow: 0 2px 6px rgba(0,0,0,.04);
     }
-    .prod-card:hover { border-color: rgba(37,99,235,.3); box-shadow: var(--sh); transform: translateY(-2px); }
+    .prod-card:hover { border-color: rgba(255,106,26,.4); box-shadow: var(--sh); transform: translateY(-2px); }
     .prod-icon {
-      width: 38px; height: 38px; border-radius: 9px;
+      width: 34px; height: 34px; border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.15rem; flex-shrink: 0;
+      font-size: 1.05rem; flex-shrink: 0;
     }
-    .ic-esim { background: var(--blue-lt); }
-    .ic-sim  { background: var(--blue-lt); }
+    .ic-esim { background: transparent; }
+    .ic-sim  { background: transparent; }
     .prod-info { flex: 1; min-width: 0; }
-    .prod-title { font-size: .86rem; font-weight: 800; color: var(--head); line-height: 1.2; }
-    .prod-sub   { font-size: .7rem; color: var(--body); margin-top: 2px; line-height: 1.35; }
-    .prod-arrow { color: var(--blue); font-size: 1.1rem; font-weight: 700; flex-shrink: 0; }
+    .prod-title { font-size: .82rem; font-weight: 800; color: var(--head); line-height: 1.2; }
+    .prod-sub   { font-size: .67rem; color: var(--body); margin-top: 2px; line-height: 1.35; }
+    .prod-arrow { color: rgba(255,255,255,.5); font-size: 1.05rem; font-weight: 700; flex-shrink: 0; }
 
     /* ════════════════════════════════════════════════════
        POPULARNE DESTINACIJE
     ════════════════════════════════════════════════════ */
-    .destinations { background: #fff; }
+    .destinations { background: transparent; }
 
     .dest-scroll {
       display: flex; gap: 14px;
@@ -409,10 +451,10 @@
     .dest-card {
       flex: 0 0 148px; scroll-snap-align: start;
       border-radius: var(--r); border: 1.5px solid var(--border);
-      background: #fff; overflow: hidden;
+      background: var(--panel); overflow: hidden;
       transition: transform .22s, box-shadow .22s, border-color .22s;
     }
-    .dest-card:hover { transform: translateY(-3px); box-shadow: var(--sh); border-color: rgba(37,99,235,.25); }
+    .dest-card:hover { transform: translateY(-3px); box-shadow: var(--sh); border-color: rgba(255,106,26,.4); }
     .dest-thumb {
       height: 94px; position: relative;
       background-size: cover; background-position: center;
@@ -437,42 +479,47 @@
     .dest-size  { font-size: .69rem; color: var(--body); margin-bottom: 6px; }
     .dest-price {
       display: inline-block;
-      background: rgba(255,102,0,.1); color: var(--orange);
+      background: rgba(255,255,255,.1); color: #fff;
       font-size: .69rem; font-weight: 700;
       padding: 3px 7px; border-radius: 5px;
+      transition: background .2s, color .2s;
+    }
+    .dest-card:hover .dest-price {
+      background: rgba(255,106,26,.15); color: var(--orange);
     }
 
     /* ════════════════════════════════════════════════════
        ZAŠTO PUTNICI BIRAJU
     ════════════════════════════════════════════════════ */
-    .why-sec { background: var(--light); }
+    .why-sec { background: transparent; }
     .why-sec > .container > h2 {
       text-align: center; font-size: 1.5rem; font-weight: 800;
       color: var(--head); margin-bottom: 24px;
     }
     .why-card-outer {
-      background: #fff; border: 1.5px solid var(--border);
+      background: var(--panel); border: 1.5px solid var(--border);
+      backdrop-filter: blur(10px);
       border-radius: 16px; padding: 28px 20px;
-      box-shadow: 0 2px 14px rgba(0,0,0,.04);
+      box-shadow: var(--sh);
     }
     .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     .why-item { text-align: center; }
     .why-icon {
       width: 48px; height: 48px; border-radius: 50%; margin: 0 auto 12px;
-      background: var(--blue-lt);
+      background: transparent;
       display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
     }
-    .why-item h3 { font-size: .9rem; font-weight: 700; color: var(--blue); margin-bottom: 5px; }
+    .why-item h3 { font-size: .9rem; font-weight: 700; color: #fff; margin-bottom: 5px; }
     .why-item p  { font-size: .8rem; color: var(--body); line-height: 1.5; }
 
     /* ════════════════════════════════════════════════════
        NOVOSTI & BLOG
     ════════════════════════════════════════════════════ */
-    .blog-sec { background: #fff; }
+    .blog-sec { background: transparent; }
     .blog-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
     .blog-card {
       border-radius: var(--r); border: 1.5px solid var(--border);
-      background: #fff; overflow: hidden;
+      background: var(--panel); overflow: hidden;
       transition: transform .22s, box-shadow .22s;
     }
     .blog-card:hover { transform: translateY(-3px); box-shadow: var(--sh); }
@@ -484,9 +531,13 @@
     .bt-hz { background: linear-gradient(135deg,#4A2912,#B8740A); }
     .bt-es { background: linear-gradient(135deg,#0A2040,#1565C0); }
     .blog-tag {
-      display: inline-block; background: var(--orange); color: #fff;
+      display: inline-block; background: rgba(255,255,255,.1); color: #fff;
       font-size: .58rem; font-weight: 700; text-transform: uppercase;
       letter-spacing: .8px; padding: 3px 8px; border-radius: 4px;
+      transition: background .2s, color .2s;
+    }
+    .blog-card:hover .blog-tag {
+      background: rgba(255,106,26,.15); color: var(--orange);
     }
     .blog-body  { padding: 14px 16px 16px; }
     .blog-title { font-size: .9rem; font-weight: 700; color: var(--head); margin-bottom: 6px; line-height: 1.4; }
@@ -494,14 +545,14 @@
     .blog-meta  { display: flex; align-items: center; gap: 14px; }
     .blog-date, .blog-read { font-size: .71rem; color: var(--body); display: flex; align-items: center; gap: 4px; }
 
-    /* ════════════════════════════════════════════════════
+    /* ══════════════════════════════════════════════════
        PARTNERI
     ════════════════════════════════════════════════════ */
     @keyframes slide { 0%{transform:translateX(0)} 100%{transform:translateX(-16.667%)} }
-    .partners-sec { background: var(--light); padding: 40px 0; }
+    .hero-partners { width: 100%; margin-top: auto; padding-top: 28px; }
     .partners-intro {
-      text-align: center; font-size: .95rem; font-weight: 600; color: var(--head);
-      max-width: 500px; margin: 0 auto 28px; line-height: 1.55;
+      text-align: center; font-size: .8rem; font-weight: 500; color: var(--body);
+      max-width: 500px; margin: 20px auto 28px; line-height: 1.55;
     }
     .partners-track-wrap { overflow: hidden; }
     .partners-track {
@@ -520,11 +571,11 @@
     /* ════════════════════════════════════════════════════
        RECENZIJE
     ════════════════════════════════════════════════════ */
-    .reviews-sec { background: #fff; }
+    .reviews-sec { background: transparent; }
     .reviews-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
     .review-card {
       border: 1.5px solid var(--border); border-radius: var(--r);
-      padding: 18px; background: #fff;
+      padding: 18px; background: var(--panel);
     }
     .stars  { color: #F59E0B; font-size: .82rem; margin-bottom: 9px; letter-spacing: 1px; }
     .quote  { font-size: .86rem; color: var(--head); line-height: 1.58; margin-bottom: 12px; }
@@ -544,7 +595,9 @@
        CTA BAR (bottom)
     ════════════════════════════════════════════════════ */
     .cta-bar {
-      background: linear-gradient(90deg, #040C1E 0%, #0C2E68 50%, #040C1E 100%);
+      background: transparent;
+      border-top: 1px solid rgba(255,255,255,.07);
+      border-bottom: 1px solid rgba(255,255,255,.07);
       padding: 18px 0;
     }
     .cta-bar-inner {
@@ -559,7 +612,7 @@
        FOOTER
     ════════════════════════════════════════════════════ */
     footer {
-      background: var(--dark);
+      background: transparent;
       border-top: 1px solid rgba(255,255,255,.07);
       padding: 48px 0 28px;
     }
@@ -602,27 +655,18 @@
        BREAKPOINTS
     ════════════════════════════════════════════════════ */
 
-    /* sm 480px */
-    @media (min-width: 480px) {
-      .hero-trust { flex-direction: row; flex-wrap: wrap; gap: 12px 24px; }
-    }
 
     /* md 768px */
     @media (min-width: 768px) {
       .container { padding: 0 32px; }
       .sec { padding: 64px 0; }
 
-      h1 { font-size: clamp(2.6rem,4.5vw,4rem) !important; }
+      h1 { font-size: 2.5rem !important; }
 
-      /* Hero two-col */
-      .hero { padding: 110px 0 56px; }
-      .hero-inner { flex-direction: row; align-items: center; gap: 48px; }
-      .hero-left  { flex: 1; }
-      .hero-right { width: auto; flex: 1; }
-      .hero-illus { min-height: 400px; }
-
-      .hero-search-box { max-width: 100%; }
-      .hero-products   { max-width: 100%; }
+      /* Hero */
+      .hero-visual { width: 220px; height: 220px; --sim-w: 132px; --sim-h: 164px; --beam: 78px; }
+      .sim-chip-hero { width: 62px; height: 46px; }
+      .sim-chip-hero-icon { width: 24px; height: 24px; }
 
       /* Destination grid */
       .dest-scroll { display: grid; grid-template-columns: repeat(5,1fr); overflow: visible; padding: 0; }
@@ -650,14 +694,50 @@
       .sec { padding: 80px 0; }
       .nav-links      { display: flex; }
       .hamburger      { display: none; }
-      .hero { padding: 120px 0 64px; }
-      .hero-illus { min-height: 440px; }
+
+      /* Hero: switch to 3-column row (text | sim card | search+products) */
+      .hero-inner {
+        flex-direction: row; align-items: center; justify-content: space-between;
+        text-align: left; gap: 36px;
+      }
+      .hero-left { align-items: flex-start; text-align: left; max-width: 360px; margin: 0; }
+      .hero-sub { margin: 0 0 16px; }
+      .hero-trust { align-items: flex-start; }
+      .hero-visual { width: 240px; height: 240px; flex-shrink: 0; --sim-w: 144px; --sim-h: 180px; --beam: 84px; }
+      .sim-chip-hero { width: 68px; height: 50px; }
+      .sim-chip-hero-icon { width: 26px; height: 26px; }
+      .hero-right-col { max-width: 300px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── WhatsApp ─────────────────────────────────── -->
+<div class="noise-overlay" aria-hidden="true"></div>
+
+<div class="particles" aria-hidden="true">
+  <span class="particle" style="top:12%; left:8%;  width:2px;  height:2px;  animation-duration:14s; animation-delay:0s;   --drift-x:18px;  --drift-y:-120px;"></span>
+  <span class="particle" style="top:38%; left:22%; width:1px;  height:1px;  animation-duration:19s; animation-delay:2s;   --drift-x:-24px; --drift-y:-160px;"></span>
+  <span class="particle" style="top:64%; left:14%; width:2px;  height:2px;  animation-duration:16s; animation-delay:5s;   --drift-x:16px;  --drift-y:-100px;"></span>
+  <span class="particle" style="top:82%; left:30%; width:1px;  height:1px;  animation-duration:21s; animation-delay:1s;   --drift-x:-14px; --drift-y:-180px;"></span>
+  <span class="particle" style="top:20%; left:44%; width:2px;  height:2px;  animation-duration:17s; animation-delay:7s;   --drift-x:22px;  --drift-y:-130px;"></span>
+  <span class="particle" style="top:52%; left:58%; width:1px;  height:1px;  animation-duration:15s; animation-delay:3s;   --drift-x:-18px; --drift-y:-110px;"></span>
+  <span class="particle" style="top:74%; left:68%; width:2px;  height:2px;  animation-duration:20s; animation-delay:9s;   --drift-x:20px;  --drift-y:-150px;"></span>
+  <span class="particle" style="top:6%;  left:76%; width:1px;  height:1px;  animation-duration:18s; animation-delay:4s;   --drift-x:-16px; --drift-y:-140px;"></span>
+  <span class="particle" style="top:30%; left:88%; width:2px;  height:2px;  animation-duration:22s; animation-delay:6s;   --drift-x:14px;  --drift-y:-170px;"></span>
+  <span class="particle" style="top:60%; left:92%; width:1px;  height:1px;  animation-duration:16s; animation-delay:10s;  --drift-x:-20px; --drift-y:-120px;"></span>
+  <span class="particle" style="top:90%; left:82%; width:2px;  height:2px;  animation-duration:19s; animation-delay:8s;   --drift-x:18px;  --drift-y:-160px;"></span>
+  <span class="particle" style="top:46%; left:5%;  width:1px;  height:1px;  animation-duration:23s; animation-delay:11s;  --drift-x:-12px; --drift-y:-190px;"></span>
+  <span class="particle" style="top:15%; left:35%; width:1px;  height:1px;  animation-duration:17s; animation-delay:13s;  --drift-x:20px;  --drift-y:-125px;"></span>
+  <span class="particle" style="top:70%; left:48%; width:2px;  height:2px;  animation-duration:15s; animation-delay:0.5s; --drift-x:-22px; --drift-y:-105px;"></span>
+  <span class="particle" style="top:35%; left:75%; width:1px;  height:1px;  animation-duration:20s; animation-delay:12s;  --drift-x:16px;  --drift-y:-155px;"></span>
+  <span class="particle" style="top:85%; left:12%; width:2px;  height:2px;  animation-duration:18s; animation-delay:14s;  --drift-x:-18px; --drift-y:-135px;"></span>
+  <span class="particle" style="top:24%; left:62%; width:1px;  height:1px;  animation-duration:21s; animation-delay:9.5s; --drift-x:14px;  --drift-y:-165px;"></span>
+  <span class="particle" style="top:56%; left:38%; width:2px;  height:2px;  animation-duration:16s; animation-delay:6.5s; --drift-x:-16px; --drift-y:-115px;"></span>
+  <span class="particle" style="top:8%;  left:55%; width:1px;  height:1px;  animation-duration:19s; animation-delay:3.5s; --drift-x:20px;  --drift-y:-145px;"></span>
+  <span class="particle" style="top:95%; left:60%; width:2px;  height:2px;  animation-duration:17s; animation-delay:15s;  --drift-x:-14px; --drift-y:-100px;"></span>
+</div>
+
+<!-- ── WhatsApp ─────────────────────────────── -->
 <a href="https://wa.me/38761000000" class="wa-btn" target="_blank" rel="noopener" aria-label="WhatsApp podrška"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></a>
 
 <!-- ── Mobile nav drawer ────────────────────────── -->
@@ -688,10 +768,16 @@
     </ul>
 
     <div class="nav-right">
-      <div class="lang-sel">
-        <span>🇧🇦</span>
-        <span>BHS</span>
-        <span class="chevron">▾</span>
+      <div class="lang-sel" id="langSel">
+        <button class="lang-sel-btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false">
+          <span id="langFlag">🇧🇦</span>
+          <span id="langLabel">BHS</span>
+          <span class="chevron">▾</span>
+        </button>
+        <div class="lang-dropdown" id="langDropdown" role="listbox">
+          <button class="lang-option active" role="option" aria-selected="true" data-flag="🇧🇦" data-label="BHS">🇧🇦 Bosanski</button>
+          <button class="lang-option" role="option" aria-selected="false" data-flag="🇬🇧" data-label="EN">🇬🇧 English</button>
+        </div>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Meni" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -737,89 +823,84 @@
         </div>
       </div>
 
-      <!-- RIGHT ─ illustration / animation placeholder -->
-      <div class="hero-right" data-r data-d="2">
-        <div class="hero-illus" id="hero-animation">
+      <!-- MIDDLE ─ glowing SIM card visual (Vercel-style hero) -->
+      <div class="hero-visual" id="simVisual" data-r data-d="2" aria-hidden="true">
+        <div class="hero-glow"></div>
+        <div class="sim-hover-glow sim-glow-top"></div>
+        <div class="sim-hover-glow sim-glow-right"></div>
+        <div class="sim-hover-glow sim-glow-bottom"></div>
+        <div class="sim-hover-glow sim-glow-left"></div>
+        <div class="sim-card-shadow"></div>
+        <div class="sim-card-hero" id="simCard">
+          <div class="sim-chip-hero">
+            <svg class="sim-chip-hero-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/></svg>
+          </div>
+        </div>
+      </div>
 
-          <div class="illus-plane" aria-hidden="true">✈️</div>
+      <!-- RIGHT ─ search + product cards -->
+      <div class="hero-right-col">
+        <div class="hero-search-box" data-r data-d="3">
+          <span class="search-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+          <input type="text" placeholder="Pretraži državu ili regiju…" aria-label="Pretraži">
+          <span class="filter-ico" title="Filteri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg></span>
+        </div>
 
-          <!-- Phone -->
-          <div class="illus-phone">
-            <div class="phone-screen">
-              <div class="phone-status">
-                <span>9:41</span>
-                <div class="phone-status-right">
-                  <span>▌▌▌</span><span>5G</span>
-                </div>
-              </div>
-
-              <div class="esim-chip-wrap" aria-hidden="true">
-                <div class="esim-chip">
-                  <div class="chip-dots">
-                    <span></span><span></span><span></span><span></span><span></span>
-                    <span></span><span></span><span></span><span></span><span></span>
-                  </div>
-                  <div class="chip-label">eSIM</div>
-                  <div class="chip-badge">✓</div>
-                </div>
-                <div class="esim-sim-text">SIM</div>
-              </div>
-
-              <div class="phone-notif">
-                <div class="notif-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/></svg></div>
-                <div>
-                  <div class="notif-title">Internet aktivan!</div>
-                  <div class="notif-sub">Dobrodošli!</div>
-                </div>
-              </div>
+        <div class="hero-products" data-r data-d="4">
+          <a href="#" class="prod-card">
+            <div class="prod-icon ic-esim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+            <div class="prod-info">
+              <div class="prod-title">eSIM</div>
+              <div class="prod-sub">Instaliraj digitalno i aktiviraj odmah.</div>
             </div>
-          </div>
-
-          <!-- Physical SIM card -->
-          <div class="illus-sim" aria-hidden="true">
-            <div class="sim-chip-gold"></div>
-            <div class="sim-text-white">SIM</div>
-          </div>
-
-          <!-- Connected badge -->
-          <div class="illus-badge" aria-hidden="true">
-            <div class="badge-check">✓</div>
-            <div>
-              <div class="badge-text-main">Radi odmah</div>
-              <div class="badge-text-sub">po dolasku</div>
+            <span class="prod-arrow">›</span>
+          </a>
+          <a href="#" class="prod-card">
+            <div class="prod-icon ic-sim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><polyline points="9 2 9 7 15 7 15 2"/><rect x="8" y="11" width="8" height="6" rx="1"/></svg></div>
+            <div class="prod-info">
+              <div class="prod-title">SIM kartica</div>
+              <div class="prod-sub">Fizička kartica, šaljemo na vašu adresu.</div>
             </div>
-          </div>
-
+            <span class="prod-arrow">›</span>
+          </a>
         </div>
       </div>
 
     </div>
 
-    <!-- Search bar -->
-    <div class="hero-search-box" data-r data-d="3">
-      <span class="search-ico">🔍</span>
-      <input type="text" placeholder="Pretraži državu ili regiju…" aria-label="Pretraži">
-      <span class="filter-ico" title="Filteri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg></span>
-    </div>
-
-    <!-- Product cards -->
-    <div class="hero-products" data-r data-d="4">
-      <a href="#" class="prod-card">
-        <div class="prod-icon ic-esim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
-        <div class="prod-info">
-          <div class="prod-title">eSIM</div>
-          <div class="prod-sub">Instaliraj digitalno i aktiviraj odmah.</div>
+    <!-- Partneri (moved to bottom of hero) -->
+    <div class="hero-partners" id="partneri">
+      <p class="partners-intro" data-r>
+        Hvala što ste nam dali priliku i garantovali za nas kod svojih putnika.
+      </p>
+      <div class="partners-track-wrap">
+        <div class="partners-track">
+          <span class="p-logo">Boss Tours</span>
+          <span class="p-logo">Centrotrans</span>
+          <span class="p-logo">Relaxtours</span>
+          <span class="p-logo">TravelShop</span>
+          <span class="p-logo">Boss Tours</span>
+          <span class="p-logo">Centrotrans</span>
+          <span class="p-logo">Relaxtours</span>
+          <span class="p-logo">TravelShop</span>
+          <span class="p-logo">Boss Tours</span>
+          <span class="p-logo">Centrotrans</span>
+          <span class="p-logo">Relaxtours</span>
+          <span class="p-logo">TravelShop</span>
+          <span class="p-logo">Boss Tours</span>
+          <span class="p-logo">Centrotrans</span>
+          <span class="p-logo">Relaxtours</span>
+          <span class="p-logo">TravelShop</span>
+          <span class="p-logo">Boss Tours</span>
+          <span class="p-logo">Centrotrans</span>
+          <span class="p-logo">Relaxtours</span>
+          <span class="p-logo">TravelShop</span>
+          <span class="p-logo">Boss Tours</span>
+          <span class="p-logo">Centrotrans</span>
+          <span class="p-logo">Relaxtours</span>
+          <span class="p-logo">TravelShop</span>
         </div>
-        <span class="prod-arrow">›</span>
-      </a>
-      <a href="#" class="prod-card">
-        <div class="prod-icon ic-sim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><polyline points="9 2 9 7 15 7 15 2"/><rect x="8" y="11" width="8" height="6" rx="1"/></svg></div>
-        <div class="prod-info">
-          <div class="prod-title">SIM kartica</div>
-          <div class="prod-sub">Fizička kartica, šaljemo na vašu adresu.</div>
-        </div>
-        <span class="prod-arrow">›</span>
-      </a>
+      </div>
     </div>
 
   </div>
@@ -969,44 +1050,6 @@
 </section>
 
 
-<!-- ══════════════════════════════════════════════════
-     PARTNERI
-══════════════════════════════════════════════════ -->
-<section class="partners-sec" id="partneri">
-  <div class="container">
-    <p class="partners-intro" data-r>
-      Hvala što ste nam dali priliku i garantovali za nas kod svojih putnika.
-    </p>
-    <div class="partners-track-wrap">
-      <div class="partners-track">
-        <span class="p-logo">Boss Tours</span>
-        <span class="p-logo">Centrotrans</span>
-        <span class="p-logo">Relaxtours</span>
-        <span class="p-logo">TravelShop</span>
-        <span class="p-logo">Boss Tours</span>
-        <span class="p-logo">Centrotrans</span>
-        <span class="p-logo">Relaxtours</span>
-        <span class="p-logo">TravelShop</span>
-        <span class="p-logo">Boss Tours</span>
-        <span class="p-logo">Centrotrans</span>
-        <span class="p-logo">Relaxtours</span>
-        <span class="p-logo">TravelShop</span>
-        <span class="p-logo">Boss Tours</span>
-        <span class="p-logo">Centrotrans</span>
-        <span class="p-logo">Relaxtours</span>
-        <span class="p-logo">TravelShop</span>
-        <span class="p-logo">Boss Tours</span>
-        <span class="p-logo">Centrotrans</span>
-        <span class="p-logo">Relaxtours</span>
-        <span class="p-logo">TravelShop</span>
-        <span class="p-logo">Boss Tours</span>
-        <span class="p-logo">Centrotrans</span>
-        <span class="p-logo">Relaxtours</span>
-        <span class="p-logo">TravelShop</span>
-      </div>
-    </div>
-  </div>
-</section>
 
 
 <!-- ══════════════════════════════════════════════════
@@ -1122,6 +1165,38 @@
     navbar.classList.toggle('scrolled', window.scrollY > 16);
   }, { passive: true });
 
+  // Language selector
+  const langSel      = document.getElementById('langSel');
+  const langBtn      = document.getElementById('langBtn');
+  const langDropdown = document.getElementById('langDropdown');
+  const langFlag     = document.getElementById('langFlag');
+  const langLabel    = document.getElementById('langLabel');
+  langBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = langSel.classList.toggle('open');
+    langBtn.setAttribute('aria-expanded', open);
+  });
+  langDropdown.querySelectorAll('.lang-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      langFlag.textContent = opt.dataset.flag;
+      langLabel.textContent = opt.dataset.label;
+      langDropdown.querySelectorAll('.lang-option').forEach(o => {
+        o.classList.remove('active');
+        o.setAttribute('aria-selected', 'false');
+      });
+      opt.classList.add('active');
+      opt.setAttribute('aria-selected', 'true');
+      langSel.classList.remove('open');
+      langBtn.setAttribute('aria-expanded', 'false');
+    });
+  });
+  document.addEventListener('click', (e) => {
+    if (!langSel.contains(e.target)) {
+      langSel.classList.remove('open');
+      langBtn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
   // Hamburger / drawer
   const hamburger  = document.getElementById('hamburger');
   const navDrawer  = document.getElementById('nav-drawer');
@@ -1152,6 +1227,30 @@
       setTimeout(() => el.classList.add('in'), parseFloat(el.dataset.d || 0) * 80 + 50);
     });
   });
+
+  // SIM card directional hover glow
+  const simVisual = document.getElementById('simVisual');
+  const simCard   = document.getElementById('simCard');
+  if (simVisual && simCard) {
+    const sides = ['top', 'right', 'bottom', 'left'];
+    simVisual.addEventListener('mousemove', (e) => {
+      const rect = simCard.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const distances = {
+        top: y,
+        bottom: rect.height - y,
+        left: x,
+        right: rect.width - x
+      };
+      const closest = sides.reduce((a, b) => distances[a] < distances[b] ? a : b);
+      sides.forEach(s => simVisual.classList.remove('hover-' + s));
+      simVisual.classList.add('hover-' + closest);
+    });
+    simVisual.addEventListener('mouseleave', () => {
+      sides.forEach(s => simVisual.classList.remove('hover-' + s));
+    });
+  }
 </script>
 
 </body>
