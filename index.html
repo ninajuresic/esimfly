@@ -1231,25 +1231,39 @@
   // SIM card directional hover glow
   const simVisual = document.getElementById('simVisual');
   const simCard   = document.getElementById('simCard');
+  const simSides  = ['top', 'right', 'bottom', 'left'];
   if (simVisual && simCard) {
-    const sides = ['top', 'right', 'bottom', 'left'];
-    simVisual.addEventListener('mousemove', (e) => {
-      const rect = simCard.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const distances = {
-        top: y,
-        bottom: rect.height - y,
-        left: x,
-        right: rect.width - x
+    const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (supportsHover) {
+      simVisual.addEventListener('mousemove', (e) => {
+        const rect = simCard.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const distances = {
+          top: y,
+          bottom: rect.height - y,
+          left: x,
+          right: rect.width - x
+        };
+        const closest = simSides.reduce((a, b) => distances[a] < distances[b] ? a : b);
+        simSides.forEach(s => simVisual.classList.remove('hover-' + s));
+        simVisual.classList.add('hover-' + closest);
+      });
+      simVisual.addEventListener('mouseleave', () => {
+        simSides.forEach(s => simVisual.classList.remove('hover-' + s));
+      });
+    } else {
+      // No hover support (touch/mobile) — auto-cycle the glow left → top → right → bottom
+      const autoSides = ['left', 'top', 'right', 'bottom'];
+      let autoIndex = 0;
+      const runAuto = () => {
+        simSides.forEach(s => simVisual.classList.remove('hover-' + s));
+        simVisual.classList.add('hover-' + autoSides[autoIndex]);
+        autoIndex = (autoIndex + 1) % autoSides.length;
       };
-      const closest = sides.reduce((a, b) => distances[a] < distances[b] ? a : b);
-      sides.forEach(s => simVisual.classList.remove('hover-' + s));
-      simVisual.classList.add('hover-' + closest);
-    });
-    simVisual.addEventListener('mouseleave', () => {
-      sides.forEach(s => simVisual.classList.remove('hover-' + s));
-    });
+      runAuto();
+      setInterval(runAuto, 1900);
+    }
   }
 </script>
 
