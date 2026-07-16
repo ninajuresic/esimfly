@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pomoć pri izboru – eSIMfly</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <style>
+    @font-face {
+      font-family: 'GeistSans'; font-style: normal; font-weight: 400; font-display: swap;
+      src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.2.5/files/geist-sans-latin-400-normal.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'GeistSans'; font-style: normal; font-weight: 700; font-display: swap;
+      src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.2.5/files/geist-sans-latin-700-normal.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'GeistSans'; font-style: normal; font-weight: 800; font-display: swap;
+      src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.2.5/files/geist-sans-latin-800-normal.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'GeistSans Fallback'; src: local('Arial');
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "GeistSans", "GeistSans Fallback", sans-serif;
+      color: #F5F5F7;
+      background: linear-gradient(19deg, #00000E 0%, #040416 55%, #0E0424 100%);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      line-height: 1.6;
+    }
+    .card {
+      max-width: 480px; text-align: center;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+      backdrop-filter: blur(12px);
+      border-radius: 16px; padding: 40px 32px;
+    }
+    .card .emoji { font-size: 2.4rem; margin-bottom: 16px; }
+    .card h1 { font-size: 1.4rem; font-weight: 800; margin-bottom: 12px; }
+    .card p { font-size: .92rem; color: rgba(245,245,247,.62); margin-bottom: 24px; }
+    .card a {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #FF6A1A; color: #fff; text-decoration: none;
+      font-weight: 700; font-size: .9rem;
+      padding: 13px 24px; border-radius: 100px;
+      transition: background .2s;
+    }
+    .card a:hover { background: #FF832E; }
+    .back { display:block; margin-top:18px; font-size:.82rem; color: rgba(245,245,247,.5); text-decoration:none; }
+    .back:hover { color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="emoji">🤔</div>
+    <h1>Nisi siguran/na šta ti treba?</h1>
+    <p>Ovdje ćemo ti postaviti par pitanja (kamo putuješ, koliko dugo, koliko interneta trošiš) i predložiti najbolje rješenje — eSIM ili fizičku SIM karticu.</p>
+    <a href="index.html">Vrati se na početnu</a>
+  </div>
+</body>
+</html>

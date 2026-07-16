@@ -4,15 +4,42 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>eSIMfly – Internet odmah po dolasku</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <style>
-    /* ─── Reset ─────────────────────────────────────── */
+    /* ─── GeistSans webfont ──────────────────────── */
+    @font-face {
+      font-family: 'GeistSans'; font-style: normal; font-weight: 400; font-display: swap;
+      src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.2.5/files/geist-sans-latin-400-normal.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'GeistSans'; font-style: normal; font-weight: 500; font-display: swap;
+      src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.2.5/files/geist-sans-latin-500-normal.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'GeistSans'; font-style: normal; font-weight: 600; font-display: swap;
+      src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.2.5/files/geist-sans-latin-600-normal.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'GeistSans'; font-style: normal; font-weight: 700; font-display: swap;
+      src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.2.5/files/geist-sans-latin-700-normal.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'GeistSans'; font-style: normal; font-weight: 800; font-display: swap;
+      src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.2.5/files/geist-sans-latin-800-normal.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'GeistSans'; font-style: normal; font-weight: 900; font-display: swap;
+      src: url('https://cdn.jsdelivr.net/npm/@fontsource/geist-sans@5.2.5/files/geist-sans-latin-900-normal.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'GeistSans Fallback'; src: local('Arial');
+    }
+
+    /* ─── Reset ───────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: "GeistSans", "GeistSans Fallback", sans-serif;
       color: #F5F5F7;
       background:
         radial-gradient(ellipse 90% 60% at 50% 0%, rgba(91,141,255,.10), transparent 65% 65%),
@@ -78,7 +105,7 @@
       display: inline-flex; align-items: center; justify-content: center;
       background: var(--orange); color: #fff;
       padding: 13px 24px; border-radius: 100px; border: none;
-      font: 700 .9rem/1 'Inter', sans-serif; cursor: pointer;
+      font: 700 .9rem/1 "GeistSans", "GeistSans Fallback", sans-serif; cursor: pointer;
       box-shadow: 0 0 0 rgba(255,106,26,0);
       transition: background .2s, transform .15s, box-shadow .3s;
     }
@@ -97,10 +124,8 @@
     [data-r][data-d="3"] { transition-delay: .21s; }
     [data-r][data-d="4"] { transition-delay: .28s; }
 
-    /* ─── Line icon sizes ────────────────────────────── */
-    .trust-pill-icon svg { width: 15px; height: 15px; color: rgba(255,255,255,.55); flex-shrink: 0; }
+    /* ─── Line icon sizes ─────────────────────────── */
     .why-icon svg        { width: 22px; height: 22px; color: rgba(255,255,255,.55); }
-    .prod-icon svg       { width: 20px; height: 20px; color: rgba(255,255,255,.55); }
     .notif-dot svg       { width: 13px; height: 13px; color: #fff; }
     .blog-read svg       { width: 12px; height: 12px; flex-shrink: 0; color: rgba(255,255,255,.55); }
     .filter-ico svg      { width: 16px; height: 16px; color: rgba(255,255,255,.55); }
@@ -230,7 +255,7 @@
 
     /* Heading */
     .hero h1 {
-      font-size: 2.3rem; font-weight: 900; line-height: 1.15;
+      font-size: 2.3rem; font-weight: 450; line-height: 1.07;
       color: var(--head); margin-bottom: 12px;
     }
     .hero h1 .accent {
@@ -243,19 +268,7 @@
       max-width: 400px; line-height: 1.6;
     }
 
-    /* Trust pills */
-    .hero-trust { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    .trust-pill {
-      display: inline-flex; align-items: center; gap: 7px;
-      font-size: .78rem; font-weight: 500; color: var(--head);
-    }
-    .trust-pill-icon {
-      display: flex; align-items: center; justify-content: center;
-      width: 22px; height: 22px; flex-shrink: 0;
-    }
-
     /* ── Hero visual: glowing SIM card (Vercel-style) ── */
-    @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
     .hero-visual {
       position: relative;
       width: 200px;
@@ -319,6 +332,27 @@
     .hero-visual.hover-right  .hero-glow,
     .hero-visual.hover-bottom .hero-glow,
     .hero-visual.hover-left   .hero-glow { opacity: .3; }
+
+    /* Continuous linear sweep for touch devices (no discrete on/off, just constant motion) */
+    @keyframes auto-glow-sweep {
+      0%   { width: var(--beam); height: var(--sim-h); transform: translate(calc(-1 * var(--sim-w) / 2 - var(--beam) / 2 + 8px), -50%); }
+      25%  { width: var(--sim-w); height: var(--beam); transform: translate(-50%, calc(-1 * var(--sim-h) / 2 - var(--beam) / 2 + 8px)); }
+      50%  { width: var(--beam); height: var(--sim-h); transform: translate(calc(var(--sim-w) / 2 - var(--beam) / 2 - 8px), -50%); }
+      75%  { width: var(--sim-w); height: var(--beam); transform: translate(-50%, calc(var(--sim-h) / 2 - var(--beam) / 2 - 8px)); }
+      100% { width: var(--beam); height: var(--sim-h); transform: translate(calc(-1 * var(--sim-w) / 2 - var(--beam) / 2 + 8px), -50%); }
+    }
+    .auto-glow {
+      position: absolute; z-index: 1; top: 50%; left: 50%;
+      pointer-events: none;
+      filter: blur(26px);
+      background: radial-gradient(ellipse at center, rgba(255,106,26,1) 0%, transparent 75%);
+      opacity: 0;
+    }
+    .hero-visual.auto-cycle .auto-glow {
+      opacity: .9;
+      animation: auto-glow-sweep 7.6s linear infinite;
+    }
+    .hero-visual.auto-cycle .hero-glow { opacity: .3; }
     .sim-card-shadow {
       position: absolute; inset: 0; margin: auto;
       width: var(--sim-w); height: var(--sim-h);
@@ -326,7 +360,6 @@
       box-shadow: 0 20px 45px rgba(0,0,0,.6);
       z-index: 1;
       pointer-events: none;
-      animation: floatY 5s ease-in-out infinite;
     }
     .sim-card-hero {
       position: relative; z-index: 2;
@@ -336,7 +369,6 @@
       clip-path: polygon(0 0, 68% 0, 100% 28%, 100% 100%, 0 100%);
       border-radius: 18px;
       display: flex; align-items: center; justify-content: center;
-      animation: floatY 5s ease-in-out infinite;
       transition: border-color .7s ease;
       cursor: pointer;
     }
@@ -393,46 +425,69 @@
       background: rgba(255,255,255,.05); border: 1.5px solid var(--border);
       backdrop-filter: blur(12px);
       border-radius: var(--r); padding: 0 14px;
-      transition: border-color .2s, box-shadow .2s;
+      transition: border-color .2s, box-shadow .2s, opacity .2s;
     }
     .hero-search-box:focus-within {
       border-color: rgba(255,106,26,.5);
       box-shadow: 0 0 0 3px rgba(255,106,26,.15);
     }
+    .hero-search-box.disabled { opacity: .5; }
     .search-ico    { display: flex; align-items: center; color: var(--body); flex-shrink: 0; }
     .search-ico svg { width: 16px; height: 16px; }
     .hero-search-box input {
       flex: 1; padding: 13px 10px; border: none; outline: none;
-      font: 500 .87rem 'Inter', sans-serif; color: var(--head); background: transparent;
+      font: 500 .87rem "GeistSans", "GeistSans Fallback", sans-serif; color: var(--head); background: transparent;
     }
     .hero-search-box input::placeholder { color: rgba(245,245,247,.35); }
+    .hero-search-box input:disabled { cursor: not-allowed; }
     .filter-ico { font-size: .95rem; color: var(--body); flex-shrink: 0; cursor: pointer; opacity: .65; transition: opacity .2s; }
     .filter-ico:hover { opacity: 1; }
 
-    /* ── Product cards ── */
+    /* Search suggestions dropdown */
+    .search-suggestions {
+      display: none;
+      background: rgba(10,9,30,.97); backdrop-filter: blur(14px);
+      border: 1px solid var(--border); border-radius: var(--r);
+      margin-top: 8px; padding: 6px; max-height: 220px; overflow-y: auto;
+    }
+    .search-suggestions.open { display: block; }
+    .suggestion-item {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 9px 10px; border-radius: 7px; cursor: pointer;
+      font-size: .82rem; color: var(--head); transition: background .15s;
+    }
+    .suggestion-item:hover { background: rgba(255,255,255,.08); }
+    .suggestion-empty {
+      padding: 10px; font-size: .78rem; color: var(--body); text-align: center;
+    }
+    .suggestion-count {
+      font-size: .68rem; color: var(--body); padding: 6px 10px 2px;
+    }
+
+    /* ── Product type segmented control ── */
+    .hero-products-row { display: flex; flex-direction: column; gap: 10px; }
     .hero-products {
-      display: grid; grid-template-columns: 1fr;
-      gap: 10px;
-    }
-    .prod-card {
-      display: flex; align-items: center; gap: 11px;
+      display: flex;
       background: rgba(255,255,255,.04); border: 1.5px solid var(--border);
-      backdrop-filter: blur(10px);
-      border-radius: var(--r); padding: 11px 13px;
-      transition: border-color .2s, box-shadow .2s, transform .2s;
+      border-radius: 100px; padding: 4px; gap: 2px;
     }
-    .prod-card:hover { border-color: rgba(255,106,26,.4); box-shadow: var(--sh); transform: translateY(-2px); }
-    .prod-icon {
-      width: 34px; height: 34px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.05rem; flex-shrink: 0;
+    .prod-btn {
+      flex: 1 1 auto; text-align: center; white-space: nowrap;
+      background: transparent; border: none; color: var(--body);
+      font: 700 .82rem/1 "GeistSans", "GeistSans Fallback", sans-serif;
+      border-radius: 100px; padding: 10px 14px; cursor: pointer;
+      transition: background .2s, color .2s;
     }
-    .ic-esim { background: transparent; }
-    .ic-sim  { background: transparent; }
-    .prod-info { flex: 1; min-width: 0; }
-    .prod-title { font-size: .82rem; font-weight: 800; color: var(--head); line-height: 1.2; }
-    .prod-sub   { font-size: .67rem; color: var(--body); margin-top: 2px; line-height: 1.35; }
-    .prod-arrow { color: rgba(255,255,255,.5); font-size: 1.05rem; font-weight: 700; flex-shrink: 0; }
+    .prod-btn:hover { color: var(--head); }
+    .prod-btn[aria-pressed="true"] { background: var(--orange); color: #fff; }
+    .prod-btn-unsure {
+      display: block; text-align: center; text-decoration: none;
+      font-size: .8rem; font-weight: 500; color: var(--body);
+      background: transparent; border: 1.5px dashed var(--border);
+      border-radius: 100px; padding: 10px 14px;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .prod-btn-unsure:hover { border-color: rgba(255,106,26,.5); color: var(--head); background: rgba(255,255,255,.04); }
 
     /* ════════════════════════════════════════════════════
        POPULARNE DESTINACIJE
@@ -475,7 +530,7 @@
       filter: drop-shadow(0 1px 3px rgba(0,0,0,.55));
     }
     .dest-info  { padding: 10px 11px 12px; }
-    .dest-name  { font-size: .84rem; font-weight: 700; color: var(--head); margin-bottom: 1px; }
+    .dest-name  { font-size: .84rem; font-weight: 600; color: var(--head); margin-bottom: 1px; }
     .dest-size  { font-size: .69rem; color: var(--body); margin-bottom: 6px; }
     .dest-price {
       display: inline-block;
@@ -493,7 +548,7 @@
     ════════════════════════════════════════════════════ */
     .why-sec { background: transparent; }
     .why-sec > .container > h2 {
-      text-align: center; font-size: 1.5rem; font-weight: 800;
+      text-align: center; font-size: 1.5rem; font-weight: 600;
       color: var(--head); margin-bottom: 24px;
     }
     .why-card-outer {
@@ -509,7 +564,7 @@
       background: transparent;
       display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
     }
-    .why-item h3 { font-size: .9rem; font-weight: 700; color: #fff; margin-bottom: 5px; }
+    .why-item h3 { font-size: .9rem; font-weight: 600; color: #fff; margin-bottom: 5px; }
     .why-item p  { font-size: .8rem; color: var(--body); line-height: 1.5; }
 
     /* ════════════════════════════════════════════════════
@@ -540,19 +595,43 @@
       background: rgba(255,106,26,.15); color: var(--orange);
     }
     .blog-body  { padding: 14px 16px 16px; }
-    .blog-title { font-size: .9rem; font-weight: 700; color: var(--head); margin-bottom: 6px; line-height: 1.4; }
+    .blog-title { font-size: .9rem; font-weight: 600; color: var(--head); margin-bottom: 6px; line-height: 1.4; }
     .blog-desc  { font-size: .78rem; color: var(--body); margin-bottom: 10px; line-height: 1.5; }
     .blog-meta  { display: flex; align-items: center; gap: 14px; }
     .blog-date, .blog-read { font-size: .71rem; color: var(--body); display: flex; align-items: center; gap: 4px; }
 
     /* ══════════════════════════════════════════════════
+       HERO HIGHLIGHTS (bottom of hero)
+    ════════════════════════════════════════════════════ */
+    .hero-partners { width: 100%; margin-top: auto; padding-top: 28px; }
+    .hero-highlights {
+      display: flex; flex-wrap: wrap; justify-content: center;
+      gap: 12px 28px; max-width: 720px; margin: 0 auto;
+    }
+    .highlight-item {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: .8rem; font-weight: 500; color: var(--body);
+    }
+    .highlight-check {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(255,106,26,.15); color: var(--orange);
+      font-size: .6rem; font-weight: 800;
+    }
+
+    /* ══════════════════════════════════════════════════
        PARTNERI
     ════════════════════════════════════════════════════ */
     @keyframes slide { 0%{transform:translateX(0)} 100%{transform:translateX(-16.667%)} }
-    .hero-partners { width: 100%; margin-top: auto; padding-top: 28px; }
+    .partners-sec { background: transparent; padding: 40px 0; }
+    .partners-glass {
+      background: rgba(255,255,255,.04); backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,.1); border-radius: 20px;
+      padding: 32px 24px;
+    }
     .partners-intro {
       text-align: center; font-size: .8rem; font-weight: 500; color: var(--body);
-      max-width: 500px; margin: 20px auto 28px; line-height: 1.55;
+      max-width: 500px; margin: 0 auto 28px; line-height: 1.55;
     }
     .partners-track-wrap { overflow: hidden; }
     .partners-track {
@@ -604,7 +683,7 @@
       display: flex; flex-direction: column;
       align-items: center; text-align: center; gap: 12px;
     }
-    .cta-bar-text h3 { font-size: 1.05rem; font-weight: 800; color: #fff; margin-bottom: 3px; }
+    .cta-bar-text h3 { font-size: 1.05rem; font-weight: 600; color: #fff; margin-bottom: 3px; }
     .cta-bar-text p  { font-size: .78rem; color: rgba(255,255,255,.55); }
     .cta-bar .btn    { padding: 12px 22px; gap: 8px; white-space: nowrap; }
 
@@ -702,11 +781,12 @@
       }
       .hero-left { align-items: flex-start; text-align: left; max-width: 360px; margin: 0; }
       .hero-sub { margin: 0 0 16px; }
-      .hero-trust { align-items: flex-start; }
       .hero-visual { width: 240px; height: 240px; flex-shrink: 0; --sim-w: 144px; --sim-h: 180px; --beam: 84px; }
       .sim-chip-hero { width: 68px; height: 50px; }
       .sim-chip-hero-icon { width: 26px; height: 26px; }
       .hero-right-col { max-width: 300px; }
+      .hero-highlights { flex-wrap: nowrap; max-width: none; gap: 22px; }
+      .highlight-item { white-space: nowrap; }
     }
   </style>
 </head>
@@ -809,18 +889,6 @@
           Brzi mobilni internet u 190+ zemalja.<br>
           Bez roaminga. Bez ugovora. Bez stresa.
         </p>
-
-        <div class="hero-trust" data-r data-d="3">
-          <div class="trust-pill">
-            <span class="trust-pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Aktivacija za 2 min
-          </div>
-          <div class="trust-pill">
-            <span class="trust-pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/></svg></span>Radi odmah po dolasku
-          </div>
-          <div class="trust-pill">
-            <span class="trust-pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>Bez roaminga, bez ugovora
-          </div>
-        </div>
       </div>
 
       <!-- MIDDLE ─ glowing SIM card visual (Vercel-style hero) -->
@@ -830,6 +898,7 @@
         <div class="sim-hover-glow sim-glow-right"></div>
         <div class="sim-hover-glow sim-glow-bottom"></div>
         <div class="sim-hover-glow sim-glow-left"></div>
+        <div class="auto-glow"></div>
         <div class="sim-card-shadow"></div>
         <div class="sim-card-hero" id="simCard">
           <div class="sim-chip-hero">
@@ -840,66 +909,32 @@
 
       <!-- RIGHT ─ search + product cards -->
       <div class="hero-right-col">
-        <div class="hero-search-box" data-r data-d="3">
+        <div class="hero-search-box" id="heroSearchBox" data-r data-d="3">
           <span class="search-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-          <input type="text" placeholder="Pretraži državu ili regiju…" aria-label="Pretraži">
+          <input type="text" id="countrySearchInput" placeholder="Pretraži državu ili regiju…" aria-label="Pretraži" autocomplete="off">
           <span class="filter-ico" title="Filteri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg></span>
         </div>
+        <div class="search-suggestions" id="searchSuggestions"></div>
 
-        <div class="hero-products" data-r data-d="4">
-          <a href="#" class="prod-card">
-            <div class="prod-icon ic-esim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
-            <div class="prod-info">
-              <div class="prod-title">eSIM</div>
-              <div class="prod-sub">Instaliraj digitalno i aktiviraj odmah.</div>
-            </div>
-            <span class="prod-arrow">›</span>
-          </a>
-          <a href="#" class="prod-card">
-            <div class="prod-icon ic-sim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><polyline points="9 2 9 7 15 7 15 2"/><rect x="8" y="11" width="8" height="6" rx="1"/></svg></div>
-            <div class="prod-info">
-              <div class="prod-title">SIM kartica</div>
-              <div class="prod-sub">Fizička kartica, šaljemo na vašu adresu.</div>
-            </div>
-            <span class="prod-arrow">›</span>
-          </a>
+        <div class="hero-products-row" data-r data-d="4">
+          <div class="hero-products">
+            <button type="button" class="prod-btn" id="btnEsim" data-product="esim" aria-pressed="true">eSIM</button>
+            <button type="button" class="prod-btn" id="btnSim" data-product="sim" aria-pressed="false">SIM kartica</button>
+          </div>
+          <a href="pomoc-pri-izboru.html" class="prod-btn-unsure">Pojma nemam šta hoću</a>
         </div>
       </div>
 
     </div>
 
-    <!-- Partneri (moved to bottom of hero) -->
-    <div class="hero-partners" id="partneri">
-      <p class="partners-intro" data-r>
-        Hvala što ste nam dali priliku i garantovali za nas kod svojih putnika.
-      </p>
-      <div class="partners-track-wrap">
-        <div class="partners-track">
-          <span class="p-logo">Boss Tours</span>
-          <span class="p-logo">Centrotrans</span>
-          <span class="p-logo">Relaxtours</span>
-          <span class="p-logo">TravelShop</span>
-          <span class="p-logo">Boss Tours</span>
-          <span class="p-logo">Centrotrans</span>
-          <span class="p-logo">Relaxtours</span>
-          <span class="p-logo">TravelShop</span>
-          <span class="p-logo">Boss Tours</span>
-          <span class="p-logo">Centrotrans</span>
-          <span class="p-logo">Relaxtours</span>
-          <span class="p-logo">TravelShop</span>
-          <span class="p-logo">Boss Tours</span>
-          <span class="p-logo">Centrotrans</span>
-          <span class="p-logo">Relaxtours</span>
-          <span class="p-logo">TravelShop</span>
-          <span class="p-logo">Boss Tours</span>
-          <span class="p-logo">Centrotrans</span>
-          <span class="p-logo">Relaxtours</span>
-          <span class="p-logo">TravelShop</span>
-          <span class="p-logo">Boss Tours</span>
-          <span class="p-logo">Centrotrans</span>
-          <span class="p-logo">Relaxtours</span>
-          <span class="p-logo">TravelShop</span>
-        </div>
+    <!-- Key use cases -->
+    <div class="hero-partners">
+      <div class="hero-highlights" data-r>
+        <span class="highlight-item"><span class="highlight-check">✓</span>Radi odmah po dolasku</span>
+        <span class="highlight-item"><span class="highlight-check">✓</span>Instaliraj od kuće, koristi odmah po dolasku</span>
+        <span class="highlight-item"><span class="highlight-check">✓</span>Pozovi taksi po dolasku na destinaciju</span>
+        <span class="highlight-item"><span class="highlight-check">✓</span>Pronađi hotel na mapi po dolasku</span>
+        <span class="highlight-item"><span class="highlight-check">✓</span>Javi se porodici</span>
       </div>
     </div>
 
@@ -913,7 +948,7 @@
 <section class="destinations sec" id="destinacije">
   <div class="container">
     <div class="between" style="margin-bottom:20px;" data-r>
-      <h2 style="font-size:1.3rem;font-weight:800;">Popularne destinacije</h2>
+      <h2 style="font-size:1.3rem;font-weight:600;">Popularne destinacije</h2>
       <a href="#" class="see-all">Pogledaj sve →</a>
     </div>
     <div class="dest-scroll">
@@ -973,22 +1008,22 @@
         <div class="why-item">
           <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
           <h3>Internet odmah po dolasku</h3>
-          <p>Nema čekanja. Poveži se čim sletiš.</p>
+          <p>Domaca raja a jeftino.</p>
         </div>
         <div class="why-item">
           <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
           <h3>eSIM ili SIM kartica</h3>
-          <p>Izaberi ono što tebi odgovara.</p>
+          <p>Internet leti ko baba kad vidi prazno mjesto u tramvaju.</p>
         </div>
         <div class="why-item">
           <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
           <h3>190+ zemalja</h3>
-          <p>Jedan klik i spreman si.</p>
+          <p>Od igle do lokomotive (od istoka do zapada).</p>
         </div>
         <div class="why-item">
           <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
           <h3>Sigurno i pouzdano</h3>
-          <p>Tvoje putovanje, naša podrška 24/7.</p>
+          <p>Saburli korisnicka podrska.</p>
         </div>
       </div>
     </div>
@@ -998,11 +1033,11 @@
 
 <!-- ══════════════════════════════════════════════════
      NOVOSTI & BLOG
-══════════════════════════════════════════════════ -->
+════════════════════════════════════════════════════ -->
 <section class="blog-sec sec" id="blog">
   <div class="container">
     <div class="between" style="margin-bottom:20px;" data-r>
-      <h2 style="font-size:1.3rem;font-weight:800;">Novosti &amp; Blog</h2>
+      <h2 style="font-size:1.3rem;font-weight:600;">Novosti &amp; Blog</h2>
       <a href="#" class="see-all">Pogledaj sve novosti →</a>
     </div>
     <div class="blog-grid">
@@ -1050,6 +1085,48 @@
 </section>
 
 
+<!-- ══════════════════════════════════════════════════
+     PARTNERI
+════════════════════════════════════════════════════ -->
+<section class="partners-sec" id="partneri">
+  <div class="container">
+    <div class="partners-glass">
+      <p class="partners-intro" data-r>
+        Hvala što ste nam dali priliku i garantovali za nas kod svojih putnika.
+      </p>
+      <div class="partners-track-wrap">
+        <div class="partners-track">
+          <span class="p-logo">Boss Tours</span>
+          <span class="p-logo">Centrotrans</span>
+          <span class="p-logo">Relaxtours</span>
+          <span class="p-logo">TravelShop</span>
+          <span class="p-logo">Boss Tours</span>
+          <span class="p-logo">Centrotrans</span>
+          <span class="p-logo">Relaxtours</span>
+          <span class="p-logo">TravelShop</span>
+          <span class="p-logo">Boss Tours</span>
+          <span class="p-logo">Centrotrans</span>
+          <span class="p-logo">Relaxtours</span>
+          <span class="p-logo">TravelShop</span>
+          <span class="p-logo">Boss Tours</span>
+          <span class="p-logo">Centrotrans</span>
+          <span class="p-logo">Relaxtours</span>
+          <span class="p-logo">TravelShop</span>
+          <span class="p-logo">Boss Tours</span>
+          <span class="p-logo">Centrotrans</span>
+          <span class="p-logo">Relaxtours</span>
+          <span class="p-logo">TravelShop</span>
+          <span class="p-logo">Boss Tours</span>
+          <span class="p-logo">Centrotrans</span>
+          <span class="p-logo">Relaxtours</span>
+          <span class="p-logo">TravelShop</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 
 
 <!-- ══════════════════════════════════════════════════
@@ -1058,7 +1135,7 @@
 <section class="reviews-sec sec" id="recenzije">
   <div class="container">
     <div class="between" style="margin-bottom:20px;" data-r>
-      <h2 style="font-size:1.3rem;font-weight:800;">Šta kažu naši korisnici</h2>
+      <h2 style="font-size:1.3rem;font-weight:600;">Šta kažu naši korisnici</h2>
       <a href="#" class="see-all">Pogledaj sve reviews →</a>
     </div>
     <div class="reviews-grid">
@@ -1228,6 +1305,100 @@
     });
   });
 
+  // Product type selector (segmented control) + country search scoping
+  const btnEsim   = document.getElementById('btnEsim');
+  const btnSim    = document.getElementById('btnSim');
+  const searchBox   = document.getElementById('heroSearchBox');
+  const searchInput = document.getElementById('countrySearchInput');
+  const suggestions = document.getElementById('searchSuggestions');
+
+  const esimCountries = [
+    'Turska', 'Hrvatska', 'Njemačka', 'Francuska', 'Italija', 'Španija', 'Grčka',
+    'Austrija', 'Švicarska', 'Nizozemska', 'Belgija', 'Portugal', 'Poljska', 'Mađarska',
+    'Rumunija', 'Bugarska', 'Srbija', 'Crna Gora', 'Slovenija', 'Albanija', 'Egipat',
+    'Saudijska Arabija', 'Ujedinjeni Arapski Emirati', 'Katar', 'Maroko', 'Tunis',
+    'SAD', 'Kanada', 'Meksiko', 'Brazil', 'Argentina', 'Japan', 'Južna Koreja',
+    'Kina', 'Tajland', 'Indonezija', 'Malezija', 'Singapur', 'Indija', 'Australija',
+    'Novi Zeland', 'Velika Britanija', 'Irska', 'Češka', 'Slovačka', 'Norveška',
+    'Švedska', 'Danska', 'Finska', 'Island'
+  ];
+  const simCountries = ['Turska', 'Evropska unija', 'Saudijska Arabija', 'Egipat', 'Tunis'];
+
+  let selectedProduct = 'esim';
+
+  function currentCountryList() {
+    if (selectedProduct === 'esim') return esimCountries;
+    if (selectedProduct === 'sim') return simCountries;
+    return [];
+  }
+
+  function setSearchEnabled(enabled) {
+    searchInput.disabled = !enabled;
+    searchBox.classList.toggle('disabled', !enabled);
+    if (!enabled) {
+      searchInput.value = '';
+      closeSuggestions();
+    }
+  }
+
+  function selectProduct(product) {
+    selectedProduct = product;
+    [btnEsim, btnSim].forEach(b => b.setAttribute('aria-pressed', 'false'));
+    if (product === 'esim') btnEsim.setAttribute('aria-pressed', 'true');
+    if (product === 'sim')  btnSim.setAttribute('aria-pressed', 'true');
+    setSearchEnabled(true);
+  }
+
+  function closeSuggestions() {
+    suggestions.classList.remove('open');
+    suggestions.innerHTML = '';
+  }
+
+  function renderSuggestions(query) {
+    const list = currentCountryList();
+    const q = query.trim().toLowerCase();
+    const matches = q ? list.filter(c => c.toLowerCase().includes(q)) : list;
+    suggestions.innerHTML = '';
+    const countLabel = document.createElement('div');
+    countLabel.className = 'suggestion-count';
+    countLabel.textContent = selectedProduct === 'sim'
+      ? matches.length + ' država dostupno za SIM karticu'
+      : matches.length + ' država dostupno za eSIM';
+    suggestions.appendChild(countLabel);
+    if (matches.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'suggestion-empty';
+      empty.textContent = 'Nema rezultata za "' + query + '".';
+      suggestions.appendChild(empty);
+    } else {
+      matches.slice(0, 8).forEach(country => {
+        const item = document.createElement('div');
+        item.className = 'suggestion-item';
+        item.textContent = country;
+        item.addEventListener('click', () => {
+          searchInput.value = country;
+          closeSuggestions();
+        });
+        suggestions.appendChild(item);
+      });
+    }
+    suggestions.classList.add('open');
+  }
+
+  [btnEsim, btnSim].forEach(btn => {
+    btn.addEventListener('click', () => selectProduct(btn.dataset.product));
+  });
+
+  searchInput.addEventListener('input', () => renderSuggestions(searchInput.value));
+  searchInput.addEventListener('focus', () => {
+    if (!searchInput.disabled) renderSuggestions(searchInput.value);
+  });
+  document.addEventListener('click', (e) => {
+    if (!searchBox.contains(e.target) && !suggestions.contains(e.target)) closeSuggestions();
+  });
+
+  selectProduct('esim');
+
   // SIM card directional hover glow
   const simVisual = document.getElementById('simVisual');
   const simCard   = document.getElementById('simCard');
@@ -1253,16 +1424,8 @@
         simSides.forEach(s => simVisual.classList.remove('hover-' + s));
       });
     } else {
-      // No hover support (touch/mobile) — auto-cycle the glow left → top → right → bottom
-      const autoSides = ['left', 'top', 'right', 'bottom'];
-      let autoIndex = 0;
-      const runAuto = () => {
-        simSides.forEach(s => simVisual.classList.remove('hover-' + s));
-        simVisual.classList.add('hover-' + autoSides[autoIndex]);
-        autoIndex = (autoIndex + 1) % autoSides.length;
-      };
-      runAuto();
-      setInterval(runAuto, 1900);
+      // No hover support (touch/mobile) — continuous linear sweep (CSS animation), no on/off toggling
+      simVisual.classList.add('auto-cycle');
     }
   }
 </script>
