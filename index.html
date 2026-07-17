@@ -262,12 +262,7 @@
       color: #fff;
     }
 
-    /* Sub */
-    .hero-sub {
-      font-size: .88rem; color: var(--body); margin: 0 auto 16px;
-      max-width: 400px; line-height: 1.6;
-    }
-
+    /* ─── Hero visual: glowing SIM card (Vercel-style) ───────────────────── */
     /* ── Hero visual: glowing SIM card (Vercel-style) ── */
     .hero-visual {
       position: relative;
@@ -344,15 +339,16 @@
     .auto-glow {
       position: absolute; z-index: 1; top: 50%; left: 50%;
       pointer-events: none;
-      filter: blur(26px);
-      background: radial-gradient(ellipse at center, rgba(255,106,26,1) 0%, transparent 75%);
+      filter: blur(20px);
+      background: radial-gradient(ellipse at center, rgba(255,106,26,1) 0%, rgba(255,106,26,1) 45%, transparent 85%);
       opacity: 0;
+      transition: opacity .4s ease;
     }
     .hero-visual.auto-cycle .auto-glow {
-      opacity: .9;
+      opacity: 1;
       animation: auto-glow-sweep 7.6s linear infinite;
     }
-    .hero-visual.auto-cycle .hero-glow { opacity: .3; }
+    .hero-visual.auto-cycle .hero-glow { opacity: .2; }
     .sim-card-shadow {
       position: absolute; inset: 0; margin: auto;
       width: var(--sim-w); height: var(--sim-h);
@@ -413,10 +409,10 @@
       color: rgba(255,150,80,.9);
     }
 
-    /* ── Hero right column: search + product cards ── */
+    /* ── Hero right column: subtext ── */
     .hero-right-col {
       width: 100%; max-width: 360px;
-      display: flex; flex-direction: column; gap: 12px;
+      display: flex; flex-direction: column;
     }
 
     /* ── Search bar ── */
@@ -424,7 +420,7 @@
       display: flex; align-items: center;
       background: rgba(255,255,255,.05); border: 1.5px solid var(--border);
       backdrop-filter: blur(12px);
-      border-radius: var(--r); padding: 0 14px;
+      border-radius: 100px; padding: 0 16px;
       transition: border-color .2s, box-shadow .2s, opacity .2s;
     }
     .hero-search-box:focus-within {
@@ -464,30 +460,100 @@
       font-size: .68rem; color: var(--body); padding: 6px 10px 2px;
     }
 
-    /* ── Product type segmented control ── */
-    .hero-products-row { display: flex; flex-direction: column; gap: 10px; }
-    .hero-products {
-      display: flex;
-      background: rgba(255,255,255,.04); border: 1.5px solid var(--border);
-      border-radius: 100px; padding: 4px; gap: 2px;
+    /* ── Product choice spotlight section ── */
+    .product-choice-sec {
+      position: relative;
+      padding: 40px 0;
+      overflow: hidden;
     }
-    .prod-btn {
-      flex: 1 1 auto; text-align: center; white-space: nowrap;
-      background: transparent; border: none; color: var(--body);
-      font: 700 .82rem/1 "GeistSans", "GeistSans Fallback", sans-serif;
-      border-radius: 100px; padding: 10px 14px; cursor: pointer;
-      transition: background .2s, color .2s;
+    .product-choice-glow {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 900px; height: 520px;
+      background: radial-gradient(ellipse at center, rgba(255,106,26,.18) 0%, rgba(91,141,255,.08) 45%, transparent 75%);
+      filter: blur(40px);
+      pointer-events: none; z-index: 0;
     }
-    .prod-btn:hover { color: var(--head); }
-    .prod-btn[aria-pressed="true"] { background: var(--orange); color: #fff; }
-    .prod-btn-unsure {
-      display: block; text-align: center; text-decoration: none;
-      font-size: .8rem; font-weight: 500; color: var(--body);
-      background: transparent; border: 1.5px dashed var(--border);
-      border-radius: 100px; padding: 10px 14px;
-      transition: border-color .2s, color .2s, background .2s;
+    .product-choice-sec .container { position: relative; z-index: 1; }
+    .product-choice-inner {
+      max-width: 640px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 14px;
+      background: rgba(255,255,255,.03); backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,.08); border-radius: 20px;
+      padding: 24px 16px;
     }
-    .prod-btn-unsure:hover { border-color: rgba(255,106,26,.5); color: var(--head); background: rgba(255,255,255,.04); }
+
+    /* ── Product selector cards ── */
+    .product-cards { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .product-card {
+      position: relative;
+      background: rgba(255,255,255,.04); border: 1.5px solid rgba(255,255,255,.12);
+      border-radius: 18px; padding: 26px 16px 20px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      cursor: pointer; font-family: inherit;
+      transition: border-color .25s, box-shadow .25s, background .25s;
+    }
+    .product-card[aria-pressed="true"] {
+      border-color: rgba(255,106,26,.7);
+      box-shadow: 0 0 0 1px rgba(255,106,26,.25), 0 0 28px rgba(255,106,26,.25);
+      background: rgba(255,106,26,.05);
+    }
+    .product-badge {
+      position: absolute; top: -11px; left: 16px;
+      background: var(--orange); color: #fff;
+      font-size: .6rem; font-weight: 800; letter-spacing: .4px; text-transform: uppercase;
+      padding: 4px 11px; border-radius: 100px; white-space: nowrap;
+    }
+    .product-check {
+      position: absolute; top: 14px; right: 14px;
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,.25);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .25s, border-color .25s;
+    }
+    .product-check svg { width: 12px; height: 12px; color: #fff; opacity: 0; transition: opacity .2s; }
+    .product-card[aria-pressed="true"] .product-check { background: var(--orange); border-color: var(--orange); }
+    .product-card[aria-pressed="true"] .product-check svg { opacity: 1; }
+    .product-icon-wrap {
+      width: 56px; height: 56px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 4px 0 14px;
+      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+    }
+    .product-icon-wrap svg { width: 24px; height: 24px; color: rgba(255,255,255,.55); }
+    .ic-esim-wrap { border-color: rgba(255,106,26,.25); }
+    .ic-simcard-wrap { border-color: rgba(139,124,246,.25); }
+    .product-card-title { display: block; font-size: 1.15rem; font-weight: 700; color: var(--head); margin-bottom: 8px; }
+    .product-card-desc { display: block; font-size: .82rem; color: var(--body); line-height: 1.55; margin-bottom: 18px; }
+    .product-learn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .8rem; font-weight: 600;
+      border: 1.5px solid; border-radius: 100px; padding: 9px 16px;
+      transition: background .2s; text-decoration: none;
+    }
+    .product-learn-esim { color: var(--orange); border-color: rgba(255,106,26,.5); }
+    .product-learn-esim:hover { background: rgba(255,106,26,.12); }
+    .product-learn-sim { color: #A99CFF; border-color: rgba(139,124,246,.5); }
+    .product-learn-sim:hover { background: rgba(139,124,246,.12); }
+
+    /* ── "Not sure" card ── */
+    .unsure-card {
+      display: flex; align-items: center; gap: 12px;
+      background: transparent; border: 1.5px dashed rgba(255,255,255,.18);
+      border-radius: 100px; padding: 10px 16px;
+      text-decoration: none; transition: border-color .2s, background .2s;
+    }
+    .unsure-card:hover { border-color: rgba(255,106,26,.5); background: rgba(255,255,255,.04); }
+    .unsure-icon {
+      width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(255,255,255,.08);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .unsure-icon svg { width: 16px; height: 16px; color: var(--head); }
+    .unsure-text { flex: 1; text-align: left; min-width: 0; }
+    .unsure-title { display: block; font-size: .82rem; font-weight: 700; color: var(--head); }
+    .unsure-sub { display: block; font-size: .68rem; color: var(--body); margin-top: 1px; }
+    .unsure-arrow { color: var(--body); flex-shrink: 0; display: flex; }
+    .unsure-arrow svg { width: 16px; height: 16px; }
 
     /* ════════════════════════════════════════════════════
        POPULARNE DESTINACIJE
@@ -601,22 +667,13 @@
     .blog-date, .blog-read { font-size: .71rem; color: var(--body); display: flex; align-items: center; gap: 4px; }
 
     /* ══════════════════════════════════════════════════
-       HERO HIGHLIGHTS (bottom of hero)
+       HERO CHECKLIST (right column)
     ════════════════════════════════════════════════════ */
-    .hero-partners { width: 100%; margin-top: auto; padding-top: 28px; }
-    .hero-highlights {
-      display: flex; flex-wrap: wrap; justify-content: center;
-      gap: 12px 28px; max-width: 720px; margin: 0 auto;
-    }
+    .hero-checklist { display: flex; flex-direction: column; gap: 14px; text-align: left; }
     .highlight-item {
-      display: inline-flex; align-items: center; gap: 7px;
-      font-size: .8rem; font-weight: 500; color: var(--body);
-    }
-    .highlight-check {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
-      background: rgba(255,106,26,.15); color: var(--orange);
-      font-size: .6rem; font-weight: 800;
+      display: block; text-align: left;
+      text-transform: uppercase; letter-spacing: .06em;
+      font-size: .72rem; font-weight: 600; color: #fff;
     }
 
     /* ══════════════════════════════════════════════════
@@ -747,6 +804,11 @@
       .sim-chip-hero { width: 62px; height: 46px; }
       .sim-chip-hero-icon { width: 24px; height: 24px; }
 
+      /* Product choice cards: side by side from here up */
+      .product-cards { grid-template-columns: 1fr 1fr; }
+      .product-choice-sec { padding: 56px 0; }
+      .product-choice-inner { padding: 32px 24px; border-radius: 24px; }
+
       /* Destination grid */
       .dest-scroll { display: grid; grid-template-columns: repeat(5,1fr); overflow: visible; padding: 0; }
       .dest-card   { flex: unset; }
@@ -780,13 +842,10 @@
         text-align: left; gap: 36px;
       }
       .hero-left { align-items: flex-start; text-align: left; max-width: 360px; margin: 0; }
-      .hero-sub { margin: 0 0 16px; }
       .hero-visual { width: 240px; height: 240px; flex-shrink: 0; --sim-w: 144px; --sim-h: 180px; --beam: 84px; }
       .sim-chip-hero { width: 68px; height: 50px; }
       .sim-chip-hero-icon { width: 26px; height: 26px; }
-      .hero-right-col { max-width: 300px; }
-      .hero-highlights { flex-wrap: nowrap; max-width: none; gap: 22px; }
-      .highlight-item { white-space: nowrap; }
+      .hero-right-col { max-width: 340px; }
     }
   </style>
 </head>
@@ -884,11 +943,6 @@
         <h1 data-r data-d="1">
           Internet odmah<br><span class="accent">po dolasku</span>
         </h1>
-
-        <p class="hero-sub" data-r data-d="2">
-          Brzi mobilni internet u 190+ zemalja.<br>
-          Bez ugovora. Bez stresa.
-        </p>
       </div>
 
       <!-- MIDDLE ─ glowing SIM card visual (Vercel-style hero) -->
@@ -907,37 +961,64 @@
         </div>
       </div>
 
-      <!-- RIGHT ─ search + product cards -->
+      <!-- RIGHT ─ checklist -->
       <div class="hero-right-col">
-        <div class="hero-search-box" id="heroSearchBox" data-r data-d="3">
-          <span class="search-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-          <input type="text" id="countrySearchInput" placeholder="Pretraži državu ili regiju…" aria-label="Pretraži" autocomplete="off">
-          <span class="filter-ico" title="Filteri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg></span>
-        </div>
-        <div class="search-suggestions" id="searchSuggestions"></div>
-
-        <div class="hero-products-row" data-r data-d="4">
-          <div class="hero-products">
-            <button type="button" class="prod-btn" id="btnEsim" data-product="esim" aria-pressed="true">eSIM</button>
-            <button type="button" class="prod-btn" id="btnSim" data-product="sim" aria-pressed="false">SIM kartica</button>
-          </div>
-          <a href="pomoc-pri-izboru.html" class="prod-btn-unsure">Pojma nemam šta hoću</a>
+        <div class="hero-checklist" data-r data-d="3">
+          <span class="highlight-item">Radi odmah po dolasku</span>
+          <span class="highlight-item">Instaliraj od kuće, koristi odmah po dolasku</span>
+          <span class="highlight-item">Pozovi taksi po dolasku na destinaciju</span>
+          <span class="highlight-item">Pronađi hotel na mapi po dolasku</span>
+          <span class="highlight-item">Javi se porodici</span>
         </div>
       </div>
 
     </div>
 
-    <!-- Key use cases -->
-    <div class="hero-partners">
-      <div class="hero-highlights" data-r>
-        <span class="highlight-item"><span class="highlight-check">✓</span>Radi odmah po dolasku</span>
-        <span class="highlight-item"><span class="highlight-check">✓</span>Instaliraj od kuće, koristi odmah po dolasku</span>
-        <span class="highlight-item"><span class="highlight-check">✓</span>Pozovi taksi po dolasku na destinaciju</span>
-        <span class="highlight-item"><span class="highlight-check">✓</span>Pronađi hotel na mapi po dolasku</span>
-        <span class="highlight-item"><span class="highlight-check">✓</span>Javi se porodici</span>
-      </div>
-    </div>
+  </div>
+</section>
 
+
+<!-- ══════════════════════════════════════════════════
+     ODABERI OPCIJU (product chooser spotlight)
+════════════════════════════════════════════════════ -->
+<section class="product-choice-sec">
+  <div class="product-choice-glow" aria-hidden="true"></div>
+  <div class="container">
+    <div class="product-choice-inner">
+      <div class="product-cards" data-r>
+        <div class="product-card" id="btnEsim" data-product="esim" role="button" tabindex="0" aria-pressed="true">
+          <span class="product-badge">Preporučeno</span>
+          <span class="product-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="product-icon-wrap ic-esim-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2.5"/><line x1="9" y1="1" x2="9" y2="6"/><line x1="15" y1="1" x2="15" y2="6"/><line x1="9" y1="18" x2="9" y2="23"/><line x1="15" y1="18" x2="15" y2="23"/><line x1="1" y1="9" x2="6" y2="9"/><line x1="1" y1="15" x2="6" y2="15"/><line x1="18" y1="9" x2="23" y2="9"/><line x1="18" y1="15" x2="23" y2="15"/></svg></span>
+          <span class="product-card-title">eSIM</span>
+          <span class="product-card-desc">Instaliraj za 2 minute.<br>Radi čim sletiš.</span>
+          <a href="pomoc-pri-izboru.html" class="product-learn product-learn-esim">Saznaj više →</a>
+        </div>
+        <div class="product-card" id="btnSim" data-product="sim" role="button" tabindex="0" aria-pressed="false">
+          <span class="product-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span class="product-icon-wrap ic-simcard-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><polyline points="9 2 9 7 15 7 15 2"/><rect x="8" y="11" width="8" height="6" rx="1"/></svg></span>
+          <span class="product-card-title">SIM kartica</span>
+          <span class="product-card-desc">Ubaci karticu i koristi.<br>Idealno ako nemaš eSIM.</span>
+          <a href="pomoc-pri-izboru.html" class="product-learn product-learn-sim">Saznaj više →</a>
+        </div>
+      </div>
+
+      <div class="hero-search-box" id="heroSearchBox" data-r data-d="1">
+        <span class="search-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <input type="text" id="countrySearchInput" placeholder="Pretraži državu ili regiju…" aria-label="Pretraži" autocomplete="off">
+        <span class="filter-ico" title="Filteri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg></span>
+      </div>
+      <div class="search-suggestions" id="searchSuggestions"></div>
+
+      <a href="pomoc-pri-izboru.html" class="unsure-card" data-r data-d="2">
+        <span class="unsure-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
+        <span class="unsure-text">
+          <span class="unsure-title">Pojma nemam šta hoću</span>
+          <span class="unsure-sub">Pomozi mi da pronađem najbolju opciju</span>
+        </span>
+        <span class="unsure-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -1385,8 +1466,17 @@
     suggestions.classList.add('open');
   }
 
-  [btnEsim, btnSim].forEach(btn => {
-    btn.addEventListener('click', () => selectProduct(btn.dataset.product));
+  [btnEsim, btnSim].forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return; // let "Saznaj više" links navigate normally
+      selectProduct(card.dataset.product);
+    });
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        selectProduct(card.dataset.product);
+      }
+    });
   });
 
   searchInput.addEventListener('input', () => renderSuggestions(searchInput.value));
@@ -1405,7 +1495,14 @@
   const simSides  = ['top', 'right', 'bottom', 'left'];
   if (simVisual && simCard) {
     const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    // Continuous ambient sweep runs everywhere (desktop + touch)
+    simVisual.classList.add('auto-cycle');
+
     if (supportsHover) {
+      simVisual.addEventListener('mouseenter', () => {
+        simVisual.classList.remove('auto-cycle');
+      });
       simVisual.addEventListener('mousemove', (e) => {
         const rect = simCard.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -1422,10 +1519,8 @@
       });
       simVisual.addEventListener('mouseleave', () => {
         simSides.forEach(s => simVisual.classList.remove('hover-' + s));
+        simVisual.classList.add('auto-cycle');
       });
-    } else {
-      // No hover support (touch/mobile) — continuous linear sweep (CSS animation), no on/off toggling
-      simVisual.classList.add('auto-cycle');
     }
   }
 </script>
